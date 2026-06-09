@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+
+<skin>
+	<imgframe name="skin_shadow" src="PNG:IDB_SHADOW"/>
+	<imgframe name="skin_shadow1" src="PNG:IDB_SHADOW1"/>
+	<imgframe name="skin_alpha" src="PNG:IDB_PNG_ALPHA"/>
+
+	<imglist name="skin_btn_min" src="PNG:IDB_COMMON_BTN_MIN" states="3" />
+	<imglist name="skin_btn_max" src="PNG:IDB_COMMON_BTN_MAX" states="3" />
+	<imglist name="skin_btn_restore" src="PNG:IDB_COMMON_BTN_RESTORE" states="3" />
+	<imglist name="skin_btn_close" src="PNG:IDB_COMMON_BTN_CLOSE" states="3" />
+	<imglist name="skin_btn_menu" src="PNG:IDB_COMMON_BTN_MENU" states="3" />
+	<imglist name="skin_btn_skin" src="PNG:IDB_COMMON_BTN_SKIN" states="3" />
+	<imglist name="skin_tabctrl_bg" src="PNG:IDB_COMMON_TAB_BG" states="4"/>
+	<imglist name="skin_btn_comm60_30" src="PNG:IDB_COMMON_BTN60_30" states="4"/>
+	<scrollbar name="skin_scrollbar" src="PNG:IDB_COMMON_SB" margin="3" hasgripper="0"/>
+	<vscrollbar name="skin_vscrollbar" src="PNG:IDB_COMMON_VSB" states="1" margin="3"/>
+	<imglist name="skin_btn_comm60_30mb" src="PNG:IDB_COMMON_BTN60_30MB" states="3"/>
+
+	<imglist name="skin_menu_itemskin" src="PNG:IDB_MENU_ITEMSKIN" states="2"/>
+</skin>

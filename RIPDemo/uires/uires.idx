@@ -1,0 +1,51 @@
+﻿<resource>
+  <UIDEF>
+    <file name="XML_INIT" path="uidef\init.xml"/>
+  </UIDEF>
+  <LAYOUT>
+    <file name="XML_MAINWND" path="xml\dlg_main.xml"/>
+  </LAYOUT>
+  
+  <values>
+  	<file name="string" path="values\string.xml"/>
+  	<file name="color" path="values\color.xml"/>
+  	<file name="skin" path="values\skin.xml"/>
+  </values>
+
+	<PNG>
+		<file name="IDB_SHADOW" path="image\shadow.png"/>
+		<file name="IDB_SHADOW1" path="image\shadow1.png"/>
+		<file name="IDB_PNG_ALPHA" path="image\alpha.png"/>
+
+		<file name="IDB_COMMON_BTN60_30" path="image\btn_60_30.png"/>
+		<file name="IDB_COMMON_BTN60_30MB" path="image\btn_60_30_mb.png"/>
+		<file name="IDB_COMMON_BTN_CLOSE" path="image\btn_close.png"/>
+		<file name="IDB_COMMON_BTN_MAX" path="image\btn_max.png"/>
+		<file name="IDB_COMMON_BTN_MENU" path="image\btn_menu.png"/>
+		<file name="IDB_COMMON_BTN_MIN" path="image\btn_min.png"/>
+		<file name="IDB_COMMON_BTN_RESTORE" path="image\btn_restore.png"/>
+		<file name="IDB_COMMON_BTN_SKIN" path="image\btn_skin.png"/>
+		<file name="IDB_COMMON_SB" path="image\sb.png"/>
+		<file name="IDB_COMMON_VSB" path="image\vsb.png"/>
+		<file name="IDB_COMMON_TAB_BG" path="image\tabctrl_bg.png"/>
+
+
+		<file name="IDB_MENU_ITEMSKIN" path="image\menu_item_skin.png"/>
+	</PNG>
+	
+  <IMG>
+  </IMG>
+  <ICON>
+    <file name="ICON_LOGO"  path="image\soui.ico"/>
+  </ICON>
+  <translator>
+    <file name="lang_cn"  path="translator\lang_cn.xml"/>
+    <file name="lang_jp"  path="translator\lang_jp.xml"/>
+  </translator>
+
+	<SMENU>
+		<file name="menu_edit" path="xml\menubar\menu_edit.xml"/>
+		<file name="menu_file" path="xml\menubar\menu_file.xml"/>
+		<file name="menu_help" path="xml\menubar\menu_help.xml"/>
+	</SMENU>
+</resource>

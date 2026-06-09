@@ -1,0 +1,10 @@
+﻿<menu iconSkin="" itemHeight="26" textMargin="0" maxWidth="120" font="face:微软雅黑,size:12">
+  <item >copy</item>
+  <item >paste</item>
+  <item text="submenu">
+    <item >hello</item>
+    <item >soui5</item>
+  </item>
+  <sep/>
+  <item >clear</item>
+</menu>

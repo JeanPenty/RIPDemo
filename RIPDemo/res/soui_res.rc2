@@ -1,0 +1,31 @@
+//stamp:01dcf7e5a57e6002
+/*<------------------------------------------------------------------------------------------------->*/
+#define DEFINE_UIRES(name, type, file_path)\
+    name type file_path
+
+DEFINE_UIRES(XML_INIT,	UIDEF,	"uires/uidef/init.xml")
+DEFINE_UIRES(XML_MAINWND,	LAYOUT,	"uires/xml/dlg_main.xml")
+DEFINE_UIRES(string,	values,	"uires/values/string.xml")
+DEFINE_UIRES(color,	values,	"uires/values/color.xml")
+DEFINE_UIRES(skin,	values,	"uires/values/skin.xml")
+DEFINE_UIRES(IDB_SHADOW,	PNG,	"uires/image/shadow.png")
+DEFINE_UIRES(IDB_SHADOW1,	PNG,	"uires/image/shadow1.png")
+DEFINE_UIRES(IDB_PNG_ALPHA,	PNG,	"uires/image/alpha.png")
+DEFINE_UIRES(IDB_COMMON_BTN60_30,	PNG,	"uires/image/btn_60_30.png")
+DEFINE_UIRES(IDB_COMMON_BTN60_30MB,	PNG,	"uires/image/btn_60_30_mb.png")
+DEFINE_UIRES(IDB_COMMON_BTN_CLOSE,	PNG,	"uires/image/btn_close.png")
+DEFINE_UIRES(IDB_COMMON_BTN_MAX,	PNG,	"uires/image/btn_max.png")
+DEFINE_UIRES(IDB_COMMON_BTN_MENU,	PNG,	"uires/image/btn_menu.png")
+DEFINE_UIRES(IDB_COMMON_BTN_MIN,	PNG,	"uires/image/btn_min.png")
+DEFINE_UIRES(IDB_COMMON_BTN_RESTORE,	PNG,	"uires/image/btn_restore.png")
+DEFINE_UIRES(IDB_COMMON_BTN_SKIN,	PNG,	"uires/image/btn_skin.png")
+DEFINE_UIRES(IDB_COMMON_SB,	PNG,	"uires/image/sb.png")
+DEFINE_UIRES(IDB_COMMON_VSB,	PNG,	"uires/image/vsb.png")
+DEFINE_UIRES(IDB_COMMON_TAB_BG,	PNG,	"uires/image/tabctrl_bg.png")
+DEFINE_UIRES(IDB_MENU_ITEMSKIN,	PNG,	"uires/image/menu_item_skin.png")
+DEFINE_UIRES(ICON_LOGO,	ICON,	"uires/image/soui.ico")
+DEFINE_UIRES(lang_cn,	translator,	"uires/translator/lang_cn.xml")
+DEFINE_UIRES(lang_jp,	translator,	"uires/translator/lang_jp.xml")
+DEFINE_UIRES(menu_edit,	SMENU,	"uires/xml/menubar/menu_edit.xml")
+DEFINE_UIRES(menu_file,	SMENU,	"uires/xml/menubar/menu_file.xml")
+DEFINE_UIRES(menu_help,	SMENU,	"uires/xml/menubar/menu_help.xml")
