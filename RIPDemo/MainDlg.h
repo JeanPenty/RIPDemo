@@ -3,6 +3,8 @@
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
 
+#include "CGlobalUnits.h"
+
 class CMainDlg : public SHostWnd
 {
 public:
@@ -15,6 +17,8 @@ public:
 	void OnMinimize();
 	void OnSize(UINT nType, CSize size);
 	BOOL OnInitDialog(HWND wndFocus, LPARAM lInitParam);
+
+	void SaveCMYKToTIFF(const char* filename, unsigned char* pData, int width, int height);
 
 protected:
 	void OnLanguage(int nID);

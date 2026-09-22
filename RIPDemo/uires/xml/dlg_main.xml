@@ -2,58 +2,37 @@
 	  title="@string/title"
 	  bigIcon="ICON_LOGO:32"
 	  smallIcon="ICON_LOGO:16"
-	  width="1600"
-      height="1000"
-      minsize="1600,1000"
-	  resizable="0"
+	  width="1200"
+      height="800"
+      minsize="1200,800"
+	  resizable="1"
 	  wndType="appMain"
 	  appWnd="1"
 	  translucent="1"
 	  trCtx="dlg_main" >
 	<root>
 		<caption pos="0,0,-0,-0" skin="skin_shadow">
-			<caption name="cap_main" pos="20,15,-20,-15" colorBkgnd="#2D2D30" font="face:微软雅黑,size:12">
+			<caption name="cap_main" pos="15,15,-15,-15" colorBkgnd="#2D2D30" font="face:微软雅黑,size:12" colorBorder="#007ACC80" margin="1" ncSkin="">
 				<caption pos="0,0,-0,@50" colorText="#FFFFFF">
 					
+					<!--
 					<menubar size="-1,-2" valign="center" useMenuEx="1">
 						<btnstyle size="60,30" skin="skin_btn_comm60_30mb" padding="2"/>
 						<menus>
 							<menuItem src="SMENU:menu_file">文件(F)</menuItem>
-							<menuItem src="SMENU:menu_file">编辑(E)</menuItem>
-							<menuItem src="SMENU:menu_file">视图(V)</menuItem>
-							<menuItem src="SMENU:menu_file">Git(G)</menuItem>
-							<menuItem src="SMENU:menu_file">项目(P)</menuItem>
-							<menuItem src="SMENU:menu_file">生成(B)</menuItem>
-							<menuItem src="SMENU:menu_file">调试(D)</menuItem>
-							<menuItem src="SMENU:menu_file">XML(X)</menuItem>
-							<menuItem src="SMENU:menu_file">测试(S)</menuItem>
-							<menuItem src="SMENU:menu_file">分析(N)</menuItem>
-							<menuItem src="SMENU:menu_file">工具(T)</menuItem>
-							<menuItem src="SMENU:menu_file">扩展(X)</menuItem>
-							<menuItem src="SMENU:menu_file">窗口(W)</menuItem>
-							<menuItem src="SMENU:menu_file">帮助(H)</menuItem>
 						</menus>
 					</menubar>
+					-->
 
 					<text pos="[10,0,@100,@50" align="left" valign="center" font="face:微软雅黑,size:12,bold:1" >RIPDemo</text>
 
-					<imgbtn name="btn_close" pos="-40,0" skin="skin_btn_close" tip="关闭"/>
-					<imgbtn name="btn_min" pos="-70,0" skin="skin_btn_min" tip="最小化"/>
-					<!--
-				  <imgbtn name="btn_max" pos="-70,0" skin="skin_btn_max" show="1" tip="最大化"/>
-				  <imgbtn name="btn_restore" pos="-70,0" skin="skin_btn_restore" show="0" tip="还原"/>
-				  <imgbtn name="btn_min" pos="-100,0" skin="skin_btn_min" tip="最小化"/>
-				  -->
+					<imgbtn name="btn_close" pos="-30,0" skin="skin_btn_close" tip="关闭"/>
+					<imgbtn name="btn_max" pos="-70,0" skin="skin_btn_max" show="1" tip="最大化"/>
+					<imgbtn name="btn_restore" pos="-70,0" skin="skin_btn_restore" show="0" tip="还原"/>
+					<imgbtn name="btn_min" pos="-100,0" skin="skin_btn_min" tip="最小化"/>
 				</caption>
-				<caption pos="0,[0,-0,-0" colorBkgnd="#00000010">
-					<splitcol name="split_row" pos="0,0,-0,-0" sepSize="4" adjustable="1">
-						<pane idealSize="1200" minSize="1000" priority="2">
-							<caption pos="0,0" size="-2,-2">
-							</caption>
-						</pane>
-						<pane idealSize="300" minSize="200" priority="1">
-						</pane>
-					</splitcol>
+				<caption pos="0,[0,-0,-0" colorBkgnd="#0B0F19">
+					
 				</caption>
 			</caption>
 		</caption>

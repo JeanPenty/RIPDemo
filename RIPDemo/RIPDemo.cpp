@@ -13,6 +13,8 @@
 
 using namespace SNS;
 
+#include "CGlobalUnits.h"
+
 //debug时方便调试设置当前目录以便从文件加载资源
 SStringT SetDefaultDir()
 {
@@ -31,6 +33,10 @@ SStringT SetDefaultDir()
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int /*nCmdShow*/)
 {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetBreakAlloc(122756);
+
+
 	HRESULT hRes = OleInitialize(NULL);
 	SASSERT(SUCCEEDED(hRes));
 	SStringT strDir = SetDefaultDir();
@@ -60,6 +66,20 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
     // 增加-h .\res\resource.h 这2个参数后生成的。
     app.InitXmlNamedID((const LPCWSTR *)&R.name, (const int *)&R.id, sizeof(R.id) / sizeof(int));
 
+	TCHAR szFilePath[MAX_PATH + 1];
+	GetModuleFileName(NULL, szFilePath, MAX_PATH);
+	(_tcsrchr(szFilePath, _T('\\')))[1] = 0;
+	CGlobalUnits::Instance().m_sstrAppPath = szFilePath;
+
+	SStringW sstrRGBICC = SStringW().Format(L"%ssRGB_v4_ICC_preference.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
+	CGlobalUnits::Instance().m_hRGBProfile = cmsOpenProfileFromFile(S_CW2A(sstrRGBICC), "r");
+
+	SStringW sstrCMYKICC = SStringW().Format(L"%s900600_sml_20241004.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
+	CGlobalUnits::Instance().m_hCMYKProfile = cmsOpenProfileFromFile(S_CW2A(sstrCMYKICC), "r");
+
+	CGlobalUnits::Instance().m_hTransformBGRA2CMYK = cmsCreateTransform(CGlobalUnits::Instance().m_hRGBProfile, TYPE_BGRA_8,
+		CGlobalUnits::Instance().m_hCMYKProfile, TYPE_CMYK_8, INTENT_RELATIVE_COLORIMETRIC, cmsFLAGS_BLACKPOINTCOMPENSATION);
+
     {
         // show main window
         CMainDlg dlgMain;
@@ -70,5 +90,8 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
         nRet = app.Run(dlgMain.m_hWnd);
     }
 	OleUninitialize();
+
+	_CrtDumpMemoryLeaks();
+
 	return nRet;
 }

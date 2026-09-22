@@ -151,7 +151,7 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\debug;../lcms/lib/debug;../mupdf1.25.4/lib/debug;../libtiff\build\libtiff\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\debug;../lcms/lib/debug;../mupdf1.25.4/lib/debug;../libtiff/build\libtiff\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>utilities4.lib;soui4.lib;imgdecoder-gdip.lib;imgdecoder-stb.lib;aupng.lib;imgdecoder-wic.lib;log4z.lib;render-d2d.lib;render-gdi.lib;render-skia.lib;skia.lib;resprovider-7zip.lib;7z.lib;resprovider-zip.lib;zlib.lib;scriptmodule-lua.lib;lua-54.lib;translator.lib;lcms2.lib;libmupdf.lib;tiffd.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
@@ -167,7 +167,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4_INSTALL_64)\include\components;$(SOUI4_INSTALL_64)\include\SOUI;$(SOUI4_INSTALL_64)\include\SOUI\include;$(SOUI4_INSTALL_64)\include\utilities\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4_INSTALL_64)\include\components;$(SOUI4_INSTALL_64)\include\SOUI;$(SOUI4_INSTALL_64)\include\SOUI\include;$(SOUI4_INSTALL_64)\include\utilities\include;../lcms/include;../mupdf1.25.4/include;../libtiff\libtiff;../libtiff\build\libtiff;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>WIN64;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -175,8 +175,8 @@
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>utilities4.lib;soui4.lib;imgdecoder-gdip.lib;imgdecoder-stb.lib;aupng.lib;imgdecoder-wic.lib;log4z.lib;render-d2d.lib;render-gdi.lib;render-skia.lib;skia.lib;resprovider-7zip.lib;7z.lib;resprovider-zip.lib;zlib.lib;scriptmodule-lua.lib;lua-54.lib;translator.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\release;../lcms/lib/release;../mupdf1.25.4/lib/release;../libtiff\build\libtiff\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>utilities4.lib;soui4.lib;imgdecoder-gdip.lib;imgdecoder-stb.lib;aupng.lib;imgdecoder-wic.lib;log4z.lib;render-d2d.lib;render-gdi.lib;render-skia.lib;skia.lib;resprovider-7zip.lib;7z.lib;resprovider-zip.lib;zlib.lib;scriptmodule-lua.lib;lua-54.lib;translator.lib;lcms2_static.lib;libmupdf.lib;tiff.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
     <ResourceCompile>
@@ -189,6 +189,8 @@
     <Text Include="readme.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CGlobalUnits.cpp" />
+    <ClCompile Include="FuncTimer.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="RIPDemo.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -202,6 +204,8 @@
     <ResourceCompile Include="RIPDemo.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CGlobalUnits.h" />
+    <ClInclude Include="FuncTimer.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="stdafx.h" />
