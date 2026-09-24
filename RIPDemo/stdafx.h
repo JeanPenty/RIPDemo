@@ -58,3 +58,5 @@ using namespace Gdiplus;
 #define new DBG_NEW
 #endif
 #endif
+
+#include "CGlobalUnits.h"

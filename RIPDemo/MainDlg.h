@@ -4,8 +4,10 @@
 #pragma once
 
 #include "CGlobalUnits.h"
+#include "CLvRIPTaskAdapter.h"
 
 class CMainDlg : public SHostWnd
+	, public CLvRIPTaskAdapter::IListen
 {
 public:
 	CMainDlg();
@@ -43,4 +45,7 @@ protected:
 		CHAIN_MSG_MAP(SHostWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
+
+private:
+	CLvRIPTaskAdapter* m_pRIPTaskAdapter = NULL;
 };

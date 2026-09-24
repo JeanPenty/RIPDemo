@@ -1,4 +1,4 @@
-//stamp:01dcf7e5a57e6002
+//stamp:01dd4b13f6690df1
 /*<------------------------------------------------------------------------------------------------->*/
 #define DEFINE_UIRES(name, type, file_path)\
     name type file_path
@@ -22,6 +22,7 @@ DEFINE_UIRES(IDB_COMMON_BTN_SKIN,	PNG,	"uires/image/btn_skin.png")
 DEFINE_UIRES(IDB_COMMON_SB,	PNG,	"uires/image/sb.png")
 DEFINE_UIRES(IDB_COMMON_VSB,	PNG,	"uires/image/vsb.png")
 DEFINE_UIRES(IDB_COMMON_TAB_BG,	PNG,	"uires/image/tabctrl_bg.png")
+DEFINE_UIRES(IDB_COMMON_BTN_CBX,	PNG,	"uires/image/cbx_btn.png")
 DEFINE_UIRES(IDB_MENU_ITEMSKIN,	PNG,	"uires/image/menu_item_skin.png")
 DEFINE_UIRES(ICON_LOGO,	ICON,	"uires/image/soui.ico")
 DEFINE_UIRES(lang_cn,	translator,	"uires/translator/lang_cn.xml")

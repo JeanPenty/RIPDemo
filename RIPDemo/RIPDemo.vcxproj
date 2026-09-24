@@ -190,6 +190,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CGlobalUnits.cpp" />
+    <ClCompile Include="CLvRIPTaskAdapter.cpp" />
     <ClCompile Include="FuncTimer.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="RIPDemo.cpp" />
@@ -205,6 +206,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CGlobalUnits.h" />
+    <ClInclude Include="CLvRIPTaskAdapter.h" />
     <ClInclude Include="FuncTimer.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="resource.h" />

@@ -13,26 +13,66 @@
 	<root>
 		<caption pos="0,0,-0,-0" skin="skin_shadow">
 			<caption name="cap_main" pos="15,15,-15,-15" colorBkgnd="#2D2D30" font="face:微软雅黑,size:12" colorBorder="#007ACC80" margin="1" ncSkin="">
-				<caption pos="0,0,-0,@50" colorText="#FFFFFF">
+				<caption pos="10,0,-0,@50" colorText="#FFFFFF">
 					
-					<!--
 					<menubar size="-1,-2" valign="center" useMenuEx="1">
 						<btnstyle size="60,30" skin="skin_btn_comm60_30mb" padding="2"/>
 						<menus>
 							<menuItem src="SMENU:menu_file">文件(F)</menuItem>
 						</menus>
 					</menubar>
-					-->
-
-					<text pos="[10,0,@100,@50" align="left" valign="center" font="face:微软雅黑,size:12,bold:1" >RIPDemo</text>
-
+					<text pos="[10,0,@100,@50" align="left" valign="center" font="face:微软雅黑,size:12,bold:1" >ZL RIP</text>
+					
 					<imgbtn name="btn_close" pos="-30,0" skin="skin_btn_close" tip="关闭"/>
 					<imgbtn name="btn_max" pos="-70,0" skin="skin_btn_max" show="1" tip="最大化"/>
 					<imgbtn name="btn_restore" pos="-70,0" skin="skin_btn_restore" show="0" tip="还原"/>
 					<imgbtn name="btn_min" pos="-100,0" skin="skin_btn_min" tip="最小化"/>
 				</caption>
-				<caption pos="0,[0,-0,-0" colorBkgnd="#0B0F19">
-					
+				<caption pos="0,[0,-0,-0" layout="hbox" colorBkgnd="#0B0F19">
+					<caption weight="1" size="-1,-2">
+						<listview pos="0,0,-0,-5" name="lv_rip_task" headHeight="0" colorBkgnd="#1A1F2E" focuable="0" sbSkin="skin_scrollbar" sbWid="8">
+							<template itemHeight="40"  skin="" colorNormal="#1A1F2E" colorHover="#2D2D30" colorSelected="#00000030" 
+									  trackMouseEvent="1" font="face:微软雅黑,size:12,adding:1" cursor="hand">
+								<text name="item_name" pos="15,0,-15,-0" align="left" valign="center" dotted="1" colorText="#FFFFFF" />
+							</template>
+						</listview>
+					</caption>
+					<caption weight="2" size="-1,-2">
+						<text pos="20,[10,@80,@30" colorText="#FFFFFF">位深:</text>
+						<combobox name="cbx_nozzle_type" 
+								  pos="[0,{0,@120,@30" 
+								  colorText="#FFFFFF"
+								  btnSkin="skin_cbx_btn" 
+								  dropDown="1"
+								  dropHeight="300" 
+								  colorBorder="#FFFFFF30" 
+								  margin="1"
+								  class="cls_edit" 
+								  dotted="0" 
+								  colorBkgnd="#1A1F2E"
+								  focusable="0" >
+							<liststyle itemHeight="30" colorText="#FFFFFF" colorBkgnd="#1A1F2E" colorSelText="#FFFFFF90" colorItemBkgnd="#1A1F2E"
+									   colorItemHotBkgnd="#2D2D30" colorItemSelBkgnd="#00000030" font="face:微软雅黑,size:12"
+									   class="cls_cbxlist_border" sbSkin="skin_scrollbar" sbWid="8" itemSkin=""/>
+							<editstyle readOnly="0" inset="5,0,5,0" margin="0" colorText="#FFFFFF" align="left" focusable="0"/>
+							<items>
+								<item text="1bit" />
+								<item text="2bit" />
+							</items>
+						</combobox>
+
+						<text pos="20,[10,@80,@30" colorText="#FFFFFF">X DPI:</text>
+						<edit name="edit_x_dpi" pos="[0,{0,@120,@30" 
+							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" />
+
+						<text pos="[50,{0,@80,@30" colorText="#FFFFFF">Y DPI:</text>
+						<edit name="edit_y_dpi" pos="[0,{0,@120,@30"
+							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" />
+
+						<check name="check_spot" pos="[50,{7" focusable="0" colorText="#FFFFFF">专色分离</check>
+					</caption>
 				</caption>
 			</caption>
 		</caption>

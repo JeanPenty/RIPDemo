@@ -41,6 +41,9 @@
     <ClCompile Include="FuncTimer.cpp">
       <Filter>全局类</Filter>
     </ClCompile>
+    <ClCompile Include="CLvRIPTaskAdapter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="RIPDemo.rc">
@@ -62,6 +65,9 @@
     </ClInclude>
     <ClInclude Include="FuncTimer.h">
       <Filter>全局类</Filter>
+    </ClInclude>
+    <ClInclude Include="CLvRIPTaskAdapter.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

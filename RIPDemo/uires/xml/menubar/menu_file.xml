@@ -4,129 +4,16 @@
 		  iconMargin="4" 
 		  textMargin="8" 
 		  maxWidth="400" 
-		  minWidth="200"
+		  minWidth="100"
 		  itemSkin="skin_menu_itemskin" 
-		  colorText="#FFFFFF" font="face:微软雅黑,size:11">
+		  colorText="#FFFFFF" font="face:微软雅黑,size:12">
 	<menuItem >
 		<window pos="0,0" size="-2,-2">
 			<window pos="0,0" size="25,25">
 			</window>
 			<window pos="[0,{0,-0,-0" layout="hbox">
 				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">新建(N)</text>
-				</window>
-				<window weight="1" size="-1,-2">
-				</window>
-			</window>
-		</window>
-		
-		<menuItem >
-			<window pos="0,0" size="-2,-2">
-				<window pos="0,0" size="25,25">
-				</window>
-				<window pos="[0,{0,-0,-0" layout="hbox">
-					<window weight="2" size="-1,-2">
-						<text pos="0,0" size="-1,-2" align="left" valign="center">打开(O)</text>
-					</window>
-					<window weight="1" size="-1,-2">
-						<text pos="0,0" size="-1,-2" align="right" valign="center">Ctrl+Sheft+N</text>
-					</window>
-				</window>
-			</window>
-		</menuItem>
-		<menuItem>
-			<window pos="0,0" size="-2,-2">
-				<window pos="0,0" size="25,25">
-				</window>
-				<window pos="[0,{0,-0,-0" layout="hbox">
-					<window weight="2" size="-1,-2">
-						<text pos="0,0" size="-1,-2" align="left" valign="center">存储库(R)...</text>
-					</window>
-					<window weight="1" size="-1,-2">
-					</window>
-				</window>
-			</window>
-		</menuItem>
-		<menuItem>
-			<window pos="0,0" size="-2,-2">
-				<window pos="0,0" size="25,25">
-				</window>
-				<window pos="[0,{0,-0,-0" layout="hbox">
-					<window weight="2" size="-1,-2">
-						<text pos="0,0" size="-2,-2" align="left" valign="center">文件(F)...</text>
-					</window>
-					<window weight="1" size="-1,-2">
-						<text pos="0,0" size="-2,-2" align="left" valign="center">Ctrl+N</text>
-					</window>
-				</window>
-			</window>
-		</menuItem>
-		<menuItem>
-			<window pos="0,0" size="-2,-2">
-				<window pos="0,0" size="25,25">
-				</window>
-				<window pos="[0,{0,-0,-0" layout="hbox">
-					<window weight="2" size="-1,-2">
-						<text pos="0,0" size="-1,-2" align="left" valign="center">从现有代码创建项目(E)...</text>
-					</window>
-					<window weight="1" size="-1,-2">
-					</window>
-				</window>
-			</window>
-		</menuItem>
-	</menuItem>
-	<menuItem >
-		<window pos="0,0" size="-2,-2">
-			<window pos="0,0" size="25,25">
-			</window>
-			<window pos="[0,{0,-0,-0" layout="hbox">
-				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">项目(P)...</text>
-				</window>
-				<window weight="1" size="-1,-2">
-				</window>
-			</window>
-		</window>
-		<menuItem />
-		<menuItem />
-		<menuItem />
-	</menuItem>
-	<menuItem >
-		<window pos="0,0" size="-2,-2">
-			<window pos="0,0" size="25,25">
-			</window>
-			<window pos="[0,{0,-0,-0" layout="hbox">
-				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">克隆存储库(E)...</text>
-				</window>
-				<window weight="1" size="-1,-2">
-				</window>
-			</window>
-		</window>
-	</menuItem>
-	<menuItem >
-		<window pos="0,0" size="-2,-2">
-			<window pos="0,0" size="25,25">
-			</window>
-			<window pos="[0,{0,-0,-0" layout="hbox">
-				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">启动窗口(W)</text>
-				</window>
-				<window weight="1" size="-1,-2">
-				</window>
-			</window>
-		</window>
-	</menuItem>
-	<sep/>
-	<menuItem >
-		<window pos="0,0" size="-2,-2">
-			<window pos="0,0" size="25,25">
-			</window>
-			<window pos="[0,{0,-0,-0" layout="hbox">
-				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">关闭(C)</text>
-				</window>
-				<window weight="1" size="-1,-2">
+					<text pos="0,0" size="-1,-2" align="left" valign="center">添加文件</text>
 				</window>
 			</window>
 		</window>

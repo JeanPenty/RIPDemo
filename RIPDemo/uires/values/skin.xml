@@ -18,4 +18,6 @@
 	<imglist name="skin_btn_comm60_30mb" src="PNG:IDB_COMMON_BTN60_30MB" states="3"/>
 
 	<imglist name="skin_menu_itemskin" src="PNG:IDB_MENU_ITEMSKIN" states="2"/>
+
+	<imglist name="skin_cbx_btn" src="PNG:IDB_COMMON_BTN_CBX" states="3" />
 </skin>

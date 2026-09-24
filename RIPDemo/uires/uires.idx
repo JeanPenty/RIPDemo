@@ -29,6 +29,7 @@
 		<file name="IDB_COMMON_VSB" path="image\vsb.png"/>
 		<file name="IDB_COMMON_TAB_BG" path="image\tabctrl_bg.png"/>
 
+		<file name="IDB_COMMON_BTN_CBX" path="image\cbx_btn.png"/>
 
 		<file name="IDB_MENU_ITEMSKIN" path="image\menu_item_skin.png"/>
 	</PNG>

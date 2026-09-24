@@ -1,4 +1,4 @@
-﻿//stamp:0d0ac734233578f2
+﻿//stamp:0d0b6d61b5351c2a
 /*<------------------------------------------------------------------------------------------------->*/
 /*该文件由uiresbuilder生成，请不要手动修改*/
 /*<------------------------------------------------------------------------------------------------->*/
@@ -31,6 +31,7 @@
 			const TCHAR * IDB_COMMON_SB;
 			const TCHAR * IDB_COMMON_VSB;
 			const TCHAR * IDB_COMMON_TAB_BG;
+			const TCHAR * IDB_COMMON_BTN_CBX;
 			const TCHAR * IDB_MENU_ITEMSKIN;
 			}PNG;
 		struct _ICON{
@@ -75,6 +76,7 @@ struct _UIRES UIRES={
 			_T("PNG:IDB_COMMON_SB"),
 			_T("PNG:IDB_COMMON_VSB"),
 			_T("PNG:IDB_COMMON_TAB_BG"),
+			_T("PNG:IDB_COMMON_BTN_CBX"),
 			_T("PNG:IDB_MENU_ITEMSKIN"),
 		},
 		{
@@ -99,19 +101,27 @@ extern struct _UIRES UIRES;
 struct _R{
 	struct _name{
 		 const wchar_t * btn_close;
+		 const wchar_t * btn_max;
 		 const wchar_t * btn_min;
+		 const wchar_t * btn_restore;
 		 const wchar_t * cap_main;
+		 const wchar_t * cbx_nozzle_type;
+		 const wchar_t * item_name;
+		 const wchar_t * lv_rip_task;
 		 const wchar_t * menu_about;
 		 const wchar_t * menu_help;
-		 const wchar_t * split_row;
 	}name;
 	struct _id{
 		int btn_close;
+		int btn_max;
 		int btn_min;
+		int btn_restore;
 		int cap_main;
+		int cbx_nozzle_type;
+		int item_name;
+		int lv_rip_task;
 		int menu_about;
 		int menu_help;
-		int split_row;
 	}id;
 	struct _color{
 		int blue;
@@ -131,20 +141,28 @@ struct _R{
 struct _R R={
 	{
 		L"btn_close",
+		L"btn_max",
 		L"btn_min",
+		L"btn_restore",
 		L"cap_main",
+		L"cbx_nozzle_type",
+		L"item_name",
+		L"lv_rip_task",
 		L"menu_about",
-		L"menu_help",
-		L"split_row"
+		L"menu_help"
 	}
 	,
 	{
 		65537,
 		65538,
+		65540,
+		65539,
 		65536,
+		65543,
+		65542,
+		65541,
 		102,
-		101,
-		65539
+		101
 	}
 	,
 	{
