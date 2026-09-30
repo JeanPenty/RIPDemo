@@ -18,8 +18,8 @@ private:
 public:
 	SStringW m_sstrAppPath = L"";
 
-	cmsHPROFILE m_hCMYKProfile = NULL;	//×ª»»CMYK
-	cmsHPROFILE m_hRGBProfile = NULL;
-	cmsHTRANSFORM m_hTransformBGRA2CMYK = NULL;
+// 	cmsHPROFILE m_hCMYKProfile = NULL;	//×ª»»CMYK
+// 	cmsHPROFILE m_hRGBProfile = NULL;
+// 	cmsHTRANSFORM m_hTransformBGRA2CMYK = NULL;
 };
 

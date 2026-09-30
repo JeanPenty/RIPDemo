@@ -33,8 +33,8 @@ SStringT SetDefaultDir()
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int /*nCmdShow*/)
 {
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_CrtSetBreakAlloc(122756);
+// 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+// 	_CrtSetBreakAlloc(122756);
 
 
 	HRESULT hRes = OleInitialize(NULL);
@@ -71,14 +71,14 @@ int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lp
 	(_tcsrchr(szFilePath, _T('\\')))[1] = 0;
 	CGlobalUnits::Instance().m_sstrAppPath = szFilePath;
 
-	SStringW sstrRGBICC = SStringW().Format(L"%ssRGB_v4_ICC_preference.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
-	CGlobalUnits::Instance().m_hRGBProfile = cmsOpenProfileFromFile(S_CW2A(sstrRGBICC), "r");
-
-	SStringW sstrCMYKICC = SStringW().Format(L"%s900600_sml_20241004.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
-	CGlobalUnits::Instance().m_hCMYKProfile = cmsOpenProfileFromFile(S_CW2A(sstrCMYKICC), "r");
-
-	CGlobalUnits::Instance().m_hTransformBGRA2CMYK = cmsCreateTransform(CGlobalUnits::Instance().m_hRGBProfile, TYPE_BGRA_8,
-		CGlobalUnits::Instance().m_hCMYKProfile, TYPE_CMYK_8, INTENT_RELATIVE_COLORIMETRIC, cmsFLAGS_BLACKPOINTCOMPENSATION);
+// 	SStringW sstrRGBICC = SStringW().Format(L"%ssRGB_v4_ICC_preference.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
+// 	CGlobalUnits::Instance().m_hRGBProfile = cmsOpenProfileFromFile(S_CW2A(sstrRGBICC), "r");
+// 
+// 	SStringW sstrCMYKICC = SStringW().Format(L"%s900600_sml_20241004.icc", CGlobalUnits::Instance().m_sstrAppPath.c_str());
+// 	CGlobalUnits::Instance().m_hCMYKProfile = cmsOpenProfileFromFile(S_CW2A(sstrCMYKICC), "r");
+// 
+// 	CGlobalUnits::Instance().m_hTransformBGRA2CMYK = cmsCreateTransform(CGlobalUnits::Instance().m_hRGBProfile, TYPE_BGRA_8,
+// 		CGlobalUnits::Instance().m_hCMYKProfile, TYPE_CMYK_8, INTENT_RELATIVE_COLORIMETRIC, cmsFLAGS_BLACKPOINTCOMPENSATION);
 
     {
         // show main window

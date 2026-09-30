@@ -17,6 +17,7 @@
 #include "resource.h"
 using namespace SNS;
 
+/*
 //mupdf
 #include "mupdf/fitz.h"
 #include "mupdf/pdf.h"
@@ -27,6 +28,7 @@ using namespace SNS;
 
 //lcms
 #include "lcms2.h"
+*/
 
 #include <string>
 #include <vector>
@@ -60,3 +62,6 @@ using namespace Gdiplus;
 #endif
 
 #include "CGlobalUnits.h"
+
+
+#include <jemalloc/jemalloc.h>

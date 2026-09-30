@@ -16,34 +16,55 @@ CMainDlg::~CMainDlg()
 
 void CMainDlg::SaveCMYKToTIFF(const char* filename, unsigned char* pData, int width, int height)
 {
-	TIFF* tif = TIFFOpen(filename, "w");
-	if (!tif) return;
-
-	// 设置基础信息
-	TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
-	TIFFSetField(tif, TIFFTAG_IMAGELENGTH, height);
-	TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
-	TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);      // CMYK = 4 个通道
-	TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_SEPARATED);
-	TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG); // 像素连续存储 (C M Y K C M Y K)
-	TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
-
-	//按行写入，防止大内存一次性拷贝
-	tsize_t scanlineSize = TIFFScanlineSize(tif);
-	for (int row = 0; row < height; row++)
-	{
-		unsigned char* pRow = pData + (row * width * 4);
-		if (TIFFWriteScanline(tif, pRow, row) < 0)
-		{
-			break;
-		}
-	}
-
-	TIFFClose(tif);
+// 	TIFF* tif = TIFFOpen(filename, "w");
+// 	if (!tif) return;
+// 
+// 	// 设置基础信息
+// 	TIFFSetField(tif, TIFFTAG_IMAGEWIDTH, width);
+// 	TIFFSetField(tif, TIFFTAG_IMAGELENGTH, height);
+// 	TIFFSetField(tif, TIFFTAG_BITSPERSAMPLE, 8);
+// 	TIFFSetField(tif, TIFFTAG_SAMPLESPERPIXEL, 4);      // CMYK = 4 个通道
+// 	TIFFSetField(tif, TIFFTAG_PHOTOMETRIC, PHOTOMETRIC_SEPARATED);
+// 	TIFFSetField(tif, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG); // 像素连续存储 (C M Y K C M Y K)
+// 	TIFFSetField(tif, TIFFTAG_COMPRESSION, COMPRESSION_LZW);
+// 
+// 	//按行写入，防止大内存一次性拷贝
+// 	tsize_t scanlineSize = TIFFScanlineSize(tif);
+// 	for (int row = 0; row < height; row++)
+// 	{
+// 		unsigned char* pRow = pData + (row * width * 4);
+// 		if (TIFFWriteScanline(tif, pRow, row) < 0)
+// 		{
+// 			break;
+// 		}
+// 	}
+// 
+// 	TIFFClose(tif);
 }
 
 BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 {
+	//测试jemalloc
+	{
+		const size_t size = 1024 * 1024;
+		void* p = je_malloc(size);
+		if (p == nullptr)
+		{
+			printf("je_malloc failed!\n");
+			return 0;
+		}
+
+		printf("je_malloc success: %p\n", p);
+		memset(p, 0x55, size);
+		size_t usable = je_malloc_usable_size(p);
+		printf("requested : %zu bytes\n", size);
+		printf("usable    : %zu bytes\n", usable);
+
+		je_free(p);
+
+		printf("je_free success\n");
+	}
+
 	SListView* pLvRIPTask = FindChildByName2<SListView>(L"lv_rip_task");
 	SASSERT(pLvRIPTask);
 	pLvRIPTask->EnableScrollBar(SSB_HORZ, FALSE);	//禁用掉水平滚动条

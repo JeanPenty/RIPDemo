@@ -1,4 +1,4 @@
-﻿//stamp:0d0b6d61b5351c2a
+﻿//stamp:0d0b72c9442c8967
 /*<------------------------------------------------------------------------------------------------->*/
 /*该文件由uiresbuilder生成，请不要手动修改*/
 /*<------------------------------------------------------------------------------------------------->*/
@@ -106,6 +106,9 @@ struct _R{
 		 const wchar_t * btn_restore;
 		 const wchar_t * cap_main;
 		 const wchar_t * cbx_nozzle_type;
+		 const wchar_t * check_spot;
+		 const wchar_t * edit_x_dpi;
+		 const wchar_t * edit_y_dpi;
 		 const wchar_t * item_name;
 		 const wchar_t * lv_rip_task;
 		 const wchar_t * menu_about;
@@ -118,6 +121,9 @@ struct _R{
 		int btn_restore;
 		int cap_main;
 		int cbx_nozzle_type;
+		int check_spot;
+		int edit_x_dpi;
+		int edit_y_dpi;
 		int item_name;
 		int lv_rip_task;
 		int menu_about;
@@ -146,6 +152,9 @@ struct _R R={
 		L"btn_restore",
 		L"cap_main",
 		L"cbx_nozzle_type",
+		L"check_spot",
+		L"edit_x_dpi",
+		L"edit_y_dpi",
 		L"item_name",
 		L"lv_rip_task",
 		L"menu_about",
@@ -159,6 +168,9 @@ struct _R R={
 		65539,
 		65536,
 		65543,
+		65546,
+		65544,
+		65545,
 		65542,
 		65541,
 		102,
