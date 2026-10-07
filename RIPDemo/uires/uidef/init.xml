@@ -5,7 +5,8 @@
   <string src="values:string" />
   <skin src="values:skin"/>
   <color src="values:color"/>
-
+	
+  <caret color="#FFFFFF" animate="true" fadeTime="20" showTime="10" interpolator="Accelerate"/>
 
   <style>
     <class name="normalbtn" font="" colorText="#385e8b" colorTextDisable="#91a7c0" textMode="0x25" cursor="hand" margin-x="0"/>

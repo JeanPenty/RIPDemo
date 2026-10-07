@@ -30,14 +30,14 @@
 				</caption>
 				<caption pos="0,[0,-0,-0" layout="hbox" colorBkgnd="#0B0F19">
 					<caption weight="1" size="-1,-2">
-						<listview pos="0,0,-0,-5" name="lv_rip_task" headHeight="0" colorBkgnd="#1A1F2E" focuable="0" sbSkin="skin_scrollbar" sbWid="8">
+						<listview pos="0,0,-5,-0" name="lv_rip_task" headHeight="0" colorBkgnd="#1A1F2E" focuable="0" sbSkin="skin_scrollbar" sbWid="8">
 							<template itemHeight="40"  skin="" colorNormal="#1A1F2E" colorHover="#2D2D30" colorSelected="#00000030" 
 									  trackMouseEvent="1" font="face:微软雅黑,size:12,adding:1" cursor="hand">
 								<text name="item_name" pos="15,0,-15,-0" align="left" valign="center" dotted="1" colorText="#FFFFFF" />
 							</template>
 						</listview>
 					</caption>
-					<caption weight="2" size="-1,-2">
+					<caption weight="1" size="-1,-2">
 						<text pos="20,[10,@80,@30" colorText="#FFFFFF">位深:</text>
 						<combobox name="cbx_nozzle_type" 
 								  pos="[0,{0,@120,@30" 
@@ -64,14 +64,46 @@
 						<text pos="20,[10,@80,@30" colorText="#FFFFFF">X DPI:</text>
 						<edit name="edit_x_dpi" pos="[0,{0,@120,@30" 
 							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
-							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" />
+							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
 
 						<text pos="[50,{0,@80,@30" colorText="#FFFFFF">Y DPI:</text>
 						<edit name="edit_y_dpi" pos="[0,{0,@120,@30"
 							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
-							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" />
+							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
 
 						<check name="check_spot" pos="[50,{7" focusable="0" colorText="#FFFFFF">专色分离</check>
+
+						<group pos="20,[20,-5,@60" text="ICC曲线(CMYK分色曲线)" colorText="#FFFFFF" align="left" headerHeight="20">
+							<edit name="edit_icc_path" pos="10,0,-100,@30"
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+
+							<button name="btn_log_all" pos="[5,{-5,-5,-5" focusable="0"
+									skin="skin_alpha" colorText="#64748B" colorTextHover="#FFFFFF" colorTextPush="#3B82F6"
+									font="face:微软雅黑,size:12" cursor="hand">选择文件</button>
+						</group>
+
+						<group pos="20,[10,-5,@65" text="颜色阈值（过滤掉低于各分量阈值的数据）" colorText="#FFFFFF" align="left" headerHeight="20">
+							<text pos="10,[0,@30,@30" >C:</text>
+							<edit name="edit_threshold_c" pos="[0,{0,@80,@30"
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+
+							<text pos="[20,{0,@30,@30" >M:</text>
+							<edit name="edit_threshold_m" pos="[0,{0,@80,@30"
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+
+							<text pos="[20,{0,@30,@30">Y:</text>
+							<edit name="edit_threshold_y" pos="[0,{0,@80,@30"
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+
+							<text pos="[20,{0,@30,@30" >K:</text>
+							<edit name="edit_threshold_k" pos="[0,{0,@80,@30"
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+						</group>
 					</caption>
 				</caption>
 			</caption>

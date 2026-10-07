@@ -671,3 +671,61 @@ pid=38632 tid=19292 2026-09-30 14:33:30.366 ALARM log4z.dll logger " name=soui4 
 pid=38632 tid=39200 2026-09-30 14:33:31.841 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):386
 pid=8276 tid=24180 2026-09-30 14:35:29.206 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
 pid=8276 tid=24180 2026-09-30 14:35:29.206 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=8588 tid=11540 2026-10-02 16:07:28.537 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=8588 tid=11540 2026-10-02 16:07:28.538 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=8588 tid=7160 2026-10-02 16:07:30.274 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=8588 tid=7160 2026-10-02 16:07:31.216 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=8588 tid=7160 2026-10-02 16:07:32.239 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=8588 tid=7160 2026-10-02 16:07:32.996 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=8588 tid=7160 2026-10-02 16:07:34.040 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=8588 tid=7160 2026-10-02 16:07:34.713 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=13556 tid=10428 2026-10-02 16:08:21.334 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=13556 tid=10428 2026-10-02 16:08:21.334 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=16060 tid=17188 2026-10-02 16:09:36.580 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=16060 tid=17188 2026-10-02 16:09:36.580 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=16060 tid=16660 2026-10-02 16:09:39.324 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=16404 tid=5668 2026-10-02 16:11:50.868 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=16404 tid=5668 2026-10-02 16:11:50.868 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=29604 tid=23128 2026-10-04 10:11:50.783 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=29604 tid=23128 2026-10-04 10:11:50.783 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=29996 tid=24408 2026-10-04 10:12:03.472 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=29996 tid=24408 2026-10-04 10:12:03.472 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=24920 tid=19240 2026-10-04 10:12:20.000 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=24920 tid=19240 2026-10-04 10:12:20.000 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=26908 tid=17008 2026-10-04 10:13:06.838 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=26908 tid=17008 2026-10-04 10:13:06.838 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=29456 tid=29192 2026-10-04 10:13:17.981 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=29456 tid=29192 2026-10-04 10:13:17.981 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=17124 tid=28356 2026-10-04 10:13:32.738 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=17124 tid=28356 2026-10-04 10:13:32.738 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=26144 tid=29520 2026-10-04 10:13:42.298 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=26144 tid=29520 2026-10-04 10:13:42.299 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=26144 tid=26852 2026-10-04 10:13:55.045 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):255
+pid=22104 tid=30696 2026-10-04 10:14:06.753 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=22104 tid=30696 2026-10-04 10:14:06.753 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=18944 tid=22208 2026-10-04 10:14:37.525 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=18944 tid=22208 2026-10-04 10:14:37.525 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=26196 tid=28636 2026-10-04 10:14:46.562 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=26196 tid=28636 2026-10-04 10:14:46.562 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=16828 tid=20996 2026-10-04 10:14:55.830 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=16828 tid=20996 2026-10-04 10:14:55.831 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=26916 tid=29724 2026-10-04 10:15:05.579 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=26916 tid=29724 2026-10-04 10:15:05.579 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=22508 tid=28312 2026-10-04 10:15:16.209 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=22508 tid=28312 2026-10-04 10:15:16.209 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=23220 tid=29508 2026-10-04 10:16:59.173 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=23220 tid=29508 2026-10-04 10:16:59.173 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=27936 tid=29596 2026-10-04 10:17:20.595 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=27936 tid=29596 2026-10-04 10:17:20.595 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=20336 tid=12448 2026-10-04 10:17:32.062 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=20336 tid=12448 2026-10-04 10:17:32.062 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=25764 tid=17944 2026-10-04 10:17:40.019 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=25764 tid=17944 2026-10-04 10:17:40.019 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=28260 tid=14004 2026-10-04 10:19:34.264 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=28260 tid=14004 2026-10-04 10:19:34.264 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=31060 tid=31360 2026-10-04 10:19:50.502 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=31060 tid=31360 2026-10-04 10:19:50.502 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=28124 tid=24772 2026-10-04 10:21:33.797 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=28124 tid=24772 2026-10-04 10:21:33.797 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=2104 tid=30736 2026-10-04 10:23:43.623 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
+pid=2104 tid=30736 2026-10-04 10:23:43.623 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
