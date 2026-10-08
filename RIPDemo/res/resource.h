@@ -1,4 +1,4 @@
-﻿//stamp:0d0b72c9442c8967
+﻿//stamp:0d0be40c6eea507b
 /*<------------------------------------------------------------------------------------------------->*/
 /*该文件由uiresbuilder生成，请不要手动修改*/
 /*<------------------------------------------------------------------------------------------------->*/
@@ -101,32 +101,48 @@ extern struct _UIRES UIRES;
 struct _R{
 	struct _name{
 		 const wchar_t * btn_close;
+		 const wchar_t * btn_log_all;
 		 const wchar_t * btn_max;
 		 const wchar_t * btn_min;
 		 const wchar_t * btn_restore;
 		 const wchar_t * cap_main;
 		 const wchar_t * cbx_nozzle_type;
 		 const wchar_t * check_spot;
+		 const wchar_t * edit_icc_path;
+		 const wchar_t * edit_threshold_c;
+		 const wchar_t * edit_threshold_k;
+		 const wchar_t * edit_threshold_m;
+		 const wchar_t * edit_threshold_y;
 		 const wchar_t * edit_x_dpi;
 		 const wchar_t * edit_y_dpi;
 		 const wchar_t * item_name;
 		 const wchar_t * lv_rip_task;
 		 const wchar_t * menu_about;
+		 const wchar_t * menu_file;
+		 const wchar_t * menu_file_addfile;
 		 const wchar_t * menu_help;
 	}name;
 	struct _id{
 		int btn_close;
+		int btn_log_all;
 		int btn_max;
 		int btn_min;
 		int btn_restore;
 		int cap_main;
 		int cbx_nozzle_type;
 		int check_spot;
+		int edit_icc_path;
+		int edit_threshold_c;
+		int edit_threshold_k;
+		int edit_threshold_m;
+		int edit_threshold_y;
 		int edit_x_dpi;
 		int edit_y_dpi;
 		int item_name;
 		int lv_rip_task;
 		int menu_about;
+		int menu_file;
+		int menu_file_addfile;
 		int menu_help;
 	}id;
 	struct _color{
@@ -147,33 +163,49 @@ struct _R{
 struct _R R={
 	{
 		L"btn_close",
+		L"btn_log_all",
 		L"btn_max",
 		L"btn_min",
 		L"btn_restore",
 		L"cap_main",
 		L"cbx_nozzle_type",
 		L"check_spot",
+		L"edit_icc_path",
+		L"edit_threshold_c",
+		L"edit_threshold_k",
+		L"edit_threshold_m",
+		L"edit_threshold_y",
 		L"edit_x_dpi",
 		L"edit_y_dpi",
 		L"item_name",
 		L"lv_rip_task",
 		L"menu_about",
+		L"menu_file",
+		L"menu_file_addfile",
 		L"menu_help"
 	}
 	,
 	{
-		65537,
 		65538,
-		65540,
+		65549,
 		65539,
-		65536,
-		65543,
-		65546,
-		65544,
-		65545,
-		65542,
 		65541,
+		65540,
+		65536,
+		65544,
+		65547,
+		65548,
+		65550,
+		65553,
+		65551,
+		65552,
+		65545,
+		65546,
+		65543,
+		65542,
 		102,
+		65537,
+		1,
 		101
 	}
 	,

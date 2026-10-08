@@ -7,15 +7,5 @@
 		  minWidth="100"
 		  itemSkin="skin_menu_itemskin" 
 		  colorText="#FFFFFF" font="face:微软雅黑,size:12">
-	<menuItem >
-		<window pos="0,0" size="-2,-2">
-			<window pos="0,0" size="25,25">
-			</window>
-			<window pos="[0,{0,-0,-0" layout="hbox">
-				<window weight="2" size="-1,-2">
-					<text pos="0,0" size="-1,-2" align="left" valign="center">添加文件</text>
-				</window>
-			</window>
-		</window>
-	</menuItem>
+	<menuItem id="1" name="menu_file_addfile" text="添加文件"/>
 </menuRoot>

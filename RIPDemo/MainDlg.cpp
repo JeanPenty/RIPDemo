@@ -72,11 +72,11 @@ BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 	pLvRIPTask->SetAdapter(m_pRIPTaskAdapter);
 	m_pRIPTaskAdapter->Release();
 
-	for (int i = 0; i < 10; i++)
-	{
-		SStringW sstrTaskKey = SStringW().Format(L"test_%d", i);
-		m_pRIPTaskAdapter->AddItem(sstrTaskKey);
-	}
+// 	for (int i = 0; i < 10; i++)
+// 	{
+// 		SStringW sstrTaskKey = SStringW().Format(L"test_%d", i);
+// 		m_pRIPTaskAdapter->AddItem(sstrTaskKey);
+// 	}
 
 	return 0;
 }
@@ -106,6 +106,37 @@ void CMainDlg::OnLanguage(int nID)
         pTransMgr->SetLanguage(lngName);
 		pTransMgr->InstallTranslator(lang);
         GetRoot()->SDispatchMessage(UM_SETLANGUAGE, 0, 0);
+	}
+}
+
+void CMainDlg::OnMenuFileCommand(IEvtArgs* e) {
+	EventSelectMenu* e2 = sobj_cast<EventSelectMenu>(e);
+	OnCommand(0, e2->nMenuId, NULL);
+}
+
+void CMainDlg::OnCommand(UINT uNotifyCode, int nID, HWND wndCtl)
+{
+	if (uNotifyCode == 0)
+	{
+		if (nID == R.id.menu_file_addfile) {
+			wchar_t szFile[MAX_PATH] = { 0 };
+			OPENFILENAME ofn = { 0 };
+			ofn.lStructSize = sizeof(ofn);
+			ofn.hwndOwner = m_hWnd; // SOUI窗口句柄
+			ofn.lpstrFilter = L"PDF文件 (*.pdf)\0*.pdf\0所有文件 (*.*)\0*.*\0";
+			ofn.lpstrFile = szFile;
+			ofn.nMaxFile = MAX_PATH;
+			ofn.Flags = OFN_FILEMUSTEXIST | OFN_PATHMUSTEXIST;
+
+			std::wstring wstrFile = L"";
+			if (GetOpenFileName(&ofn))
+				wstrFile = std::wstring(szFile);
+
+			int kkk = 0;
+			//将这条数据添加到list中去
+			//TODO:
+			m_pRIPTaskAdapter->AddItem(wstrFile.c_str());
+		}
 	}
 }
 

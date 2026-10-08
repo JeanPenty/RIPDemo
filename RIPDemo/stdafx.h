@@ -15,6 +15,7 @@
 #include <com-cfg.h>
 #include <SouiFactory.h>
 #include "resource.h"
+#include "res/resource.h"
 using namespace SNS;
 
 //mupdf
@@ -60,6 +61,6 @@ using namespace Gdiplus;
 #endif
 
 #include "CGlobalUnits.h"
-
-
 #include <jemalloc/jemalloc.h>
+
+#include "FileHelper.h"

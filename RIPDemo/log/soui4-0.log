@@ -729,3 +729,82 @@ pid=28124 tid=24772 2026-10-04 10:21:33.797 ALARM log4z.dll logger "------------
 pid=28124 tid=24772 2026-10-04 10:21:33.797 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
 pid=2104 tid=30736 2026-10-04 10:23:43.623 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1421
 pid=2104 tid=30736 2026-10-04 10:23:43.623 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1429
+pid=13592 tid=23780 2026-10-08 08:48:25.852 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=13592 tid=23780 2026-10-08 08:48:25.853 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=13592 tid=23444 2026-10-08 08:48:33.414 WARN  soui4.dll soui4 "OnGetInitXmlNode return empty xml" SOUI::SHostWnd::CreateEx (shostwnd.cpp):386
+pid=24216 tid=30904 2026-10-08 12:44:50.678 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=24216 tid=30904 2026-10-08 12:44:50.678 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=29900 tid=22216 2026-10-08 12:50:07.280 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=29900 tid=22216 2026-10-08 12:50:07.280 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=29900 tid=24028 2026-10-08 12:50:13.074 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=26732 tid=30984 2026-10-08 13:05:59.365 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=26732 tid=30984 2026-10-08 13:05:59.365 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=26732 tid=32852 2026-10-08 13:06:03.194 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=26732 tid=32852 2026-10-08 13:06:17.065 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=24400 tid=15436 2026-10-08 13:11:40.203 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=24400 tid=15436 2026-10-08 13:11:40.203 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=24400 tid=26732 2026-10-08 13:11:44.473 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=8276 tid=27668 2026-10-08 13:14:12.305 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=8276 tid=27668 2026-10-08 13:14:12.305 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=8276 tid=25452 2026-10-08 13:14:16.705 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=6132 tid=29604 2026-10-08 13:14:39.641 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=6132 tid=29604 2026-10-08 13:14:39.648 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=6132 tid=13136 2026-10-08 13:14:45.720 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=27992 tid=32888 2026-10-08 13:15:28.667 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=27992 tid=32888 2026-10-08 13:15:28.675 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=33532 tid=31844 2026-10-08 13:15:41.608 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=33532 tid=31844 2026-10-08 13:15:41.608 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=33532 tid=31008 2026-10-08 13:15:43.722 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=33532 tid=31008 2026-10-08 13:15:45.818 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34284 tid=34552 2026-10-08 13:16:19.720 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=34284 tid=34552 2026-10-08 13:16:19.721 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=34284 tid=34288 2026-10-08 13:16:24.636 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=17900 tid=34668 2026-10-08 13:16:46.007 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=17900 tid=34668 2026-10-08 13:16:46.007 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=17900 tid=33892 2026-10-08 13:16:47.890 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=17900 tid=33892 2026-10-08 13:16:49.442 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=17900 tid=33892 2026-10-08 13:16:50.427 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=17900 tid=33892 2026-10-08 13:16:53.218 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34588 tid=25296 2026-10-08 13:18:33.616 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=34588 tid=25296 2026-10-08 13:18:33.617 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=34588 tid=34076 2026-10-08 13:18:35.420 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34588 tid=34076 2026-10-08 13:18:37.163 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34588 tid=34076 2026-10-08 13:18:38.412 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34588 tid=34076 2026-10-08 13:18:39.098 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=34588 tid=34076 2026-10-08 13:18:39.666 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=4824 tid=30860 2026-10-08 13:54:21.542 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=4824 tid=30860 2026-10-08 13:54:21.542 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=4824 tid=29200 2026-10-08 13:54:26.273 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=33500 tid=28340 2026-10-08 13:54:31.967 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=33500 tid=28340 2026-10-08 13:54:31.968 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=33500 tid=24196 2026-10-08 13:54:34.226 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=36416 2026-10-08 14:21:51.075 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=29200 tid=36416 2026-10-08 14:21:51.076 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=29200 tid=35056 2026-10-08 14:21:53.344 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=35056 2026-10-08 14:21:55.321 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=35056 2026-10-08 14:21:56.225 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=35056 2026-10-08 14:21:57.280 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=35056 2026-10-08 14:21:57.948 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=29200 tid=35056 2026-10-08 14:21:58.619 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=40944 tid=38024 2026-10-08 14:43:53.549 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=40944 tid=38024 2026-10-08 14:43:53.549 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=40944 tid=7184 2026-10-08 14:43:55.538 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=33844 2026-10-08 14:56:42.254 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=36380 tid=33844 2026-10-08 14:56:42.254 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=36380 tid=39972 2026-10-08 14:56:44.960 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:29.520 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:31.696 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:32.624 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:33.313 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:34.008 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:34.696 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:35.418 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:36.121 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=36380 tid=39972 2026-10-08 14:57:36.929 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=39112 tid=19312 2026-10-08 14:58:11.257 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=39112 tid=19312 2026-10-08 14:58:11.257 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=39112 tid=16400 2026-10-08 14:58:13.207 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=35956 tid=26148 2026-10-08 14:59:46.518 ALARM log4z.dll logger "-----------------  log4z thread started!   ----------------------------" LogerManager::run (log4z.cpp):1448
+pid=35956 tid=26148 2026-10-08 14:59:46.518 ALARM log4z.dll logger " name=soui4 path=./log/ level=2 display=0" LogerManager::run (log4z.cpp):1456
+pid=35956 tid=38100 2026-10-08 15:01:07.040 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158
+pid=35956 tid=38100 2026-10-08 15:01:14.747 INFO  soui4.dll soui4 "###quit menu and kill timer for 0" SOUI::SMenuBarItem::PopMenu (SMenuBar.cpp):158

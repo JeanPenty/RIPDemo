@@ -15,7 +15,7 @@
 			<caption name="cap_main" pos="15,15,-15,-15" colorBkgnd="#2D2D30" font="face:微软雅黑,size:12" colorBorder="#007ACC80" margin="1" ncSkin="">
 				<caption pos="10,0,-0,@50" colorText="#FFFFFF">
 					
-					<menubar size="-1,-2" valign="center" useMenuEx="1">
+					<menubar name="menu_file" size="-1,-2" valign="center" useMenuEx="1" dock="top">
 						<btnstyle size="60,30" skin="skin_btn_comm60_30mb" padding="2"/>
 						<menus>
 							<menuItem src="SMENU:menu_file">文件(F)</menuItem>

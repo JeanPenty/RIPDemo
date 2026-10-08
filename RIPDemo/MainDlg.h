@@ -26,6 +26,9 @@ protected:
 	void OnLanguage(int nID);
 	void OnLanguageBtnCN();
 	void OnLanguageBtnJP();
+
+	void OnMenuFileCommand(IEvtArgs* e);
+	void OnCommand(UINT uNotifyCode, int nID, HWND wndCtl);
 	//soui消息
 	EVENT_MAP_BEGIN()
 		EVENT_NAME_COMMAND(L"btn_close", OnClose)
@@ -35,6 +38,7 @@ protected:
 		EVENT_NAME_COMMAND(L"zh_cn", OnLanguageBtnCN)
 		EVENT_NAME_COMMAND(L"jp", OnLanguageBtnJP)
 
+		EVENT_ID_HANDLER(R.id.menu_file, EventSelectMenu::EventID, OnMenuFileCommand)
 	EVENT_MAP_END()
 		
 	//HostWnd真实窗口消息处理
@@ -42,6 +46,7 @@ protected:
 		MSG_WM_INITDIALOG(OnInitDialog)
 		MSG_WM_CLOSE(OnClose)
 		MSG_WM_SIZE(OnSize)
+		MSG_WM_COMMAND(OnCommand)
 		CHAIN_MSG_MAP(SHostWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
