@@ -1,4 +1,4 @@
-﻿//stamp:0d0be40c6eea507b
+﻿//stamp:0d0beb39f8b60fce
 /*<------------------------------------------------------------------------------------------------->*/
 /*该文件由uiresbuilder生成，请不要手动修改*/
 /*<------------------------------------------------------------------------------------------------->*/
@@ -104,11 +104,26 @@ struct _R{
 		 const wchar_t * btn_log_all;
 		 const wchar_t * btn_max;
 		 const wchar_t * btn_min;
+		 const wchar_t * btn_outroot;
 		 const wchar_t * btn_restore;
 		 const wchar_t * cap_main;
+		 const wchar_t * cb_dither;
+		 const wchar_t * cb_prn;
 		 const wchar_t * cbx_nozzle_type;
+		 const wchar_t * check_fsserp;
+		 const wchar_t * check_gray2k;
+		 const wchar_t * check_noaa;
 		 const wchar_t * check_spot;
+		 const wchar_t * dot_line_c;
+		 const wchar_t * dot_line_k;
+		 const wchar_t * dot_line_m;
+		 const wchar_t * dot_line_sum;
+		 const wchar_t * dot_line_y;
+		 const wchar_t * dot_tip;
 		 const wchar_t * edit_icc_path;
+		 const wchar_t * edit_noaa;
+		 const wchar_t * edit_outroot;
+		 const wchar_t * edit_threads;
 		 const wchar_t * edit_threshold_c;
 		 const wchar_t * edit_threshold_k;
 		 const wchar_t * edit_threshold_m;
@@ -120,18 +135,39 @@ struct _R{
 		 const wchar_t * menu_about;
 		 const wchar_t * menu_file;
 		 const wchar_t * menu_file_addfile;
+		 const wchar_t * menu_file_clearfile;
+		 const wchar_t * menu_file_removefile;
+		 const wchar_t * menu_file_riprun;
+		 const wchar_t * menu_file_stoprip;
 		 const wchar_t * menu_help;
+		 const wchar_t * prog_rip;
+		 const wchar_t * prog_text;
 	}name;
 	struct _id{
 		int btn_close;
 		int btn_log_all;
 		int btn_max;
 		int btn_min;
+		int btn_outroot;
 		int btn_restore;
 		int cap_main;
+		int cb_dither;
+		int cb_prn;
 		int cbx_nozzle_type;
+		int check_fsserp;
+		int check_gray2k;
+		int check_noaa;
 		int check_spot;
+		int dot_line_c;
+		int dot_line_k;
+		int dot_line_m;
+		int dot_line_sum;
+		int dot_line_y;
+		int dot_tip;
 		int edit_icc_path;
+		int edit_noaa;
+		int edit_outroot;
+		int edit_threads;
 		int edit_threshold_c;
 		int edit_threshold_k;
 		int edit_threshold_m;
@@ -143,7 +179,13 @@ struct _R{
 		int menu_about;
 		int menu_file;
 		int menu_file_addfile;
+		int menu_file_clearfile;
+		int menu_file_removefile;
+		int menu_file_riprun;
+		int menu_file_stoprip;
 		int menu_help;
+		int prog_rip;
+		int prog_text;
 	}id;
 	struct _color{
 		int blue;
@@ -166,11 +208,26 @@ struct _R R={
 		L"btn_log_all",
 		L"btn_max",
 		L"btn_min",
+		L"btn_outroot",
 		L"btn_restore",
 		L"cap_main",
+		L"cb_dither",
+		L"cb_prn",
 		L"cbx_nozzle_type",
+		L"check_fsserp",
+		L"check_gray2k",
+		L"check_noaa",
 		L"check_spot",
+		L"dot_line_c",
+		L"dot_line_k",
+		L"dot_line_m",
+		L"dot_line_sum",
+		L"dot_line_y",
+		L"dot_tip",
 		L"edit_icc_path",
+		L"edit_noaa",
+		L"edit_outroot",
+		L"edit_threads",
 		L"edit_threshold_c",
 		L"edit_threshold_k",
 		L"edit_threshold_m",
@@ -182,31 +239,58 @@ struct _R R={
 		L"menu_about",
 		L"menu_file",
 		L"menu_file_addfile",
-		L"menu_help"
+		L"menu_file_clearfile",
+		L"menu_file_removefile",
+		L"menu_file_riprun",
+		L"menu_file_stoprip",
+		L"menu_help",
+		L"prog_rip",
+		L"prog_text"
 	}
 	,
 	{
 		65538,
-		65549,
+		65558,
 		65539,
 		65541,
+		65560,
 		65540,
 		65536,
-		65544,
+		65554,
+		65553,
+		65546,
+		65555,
+		65550,
+		65552,
+		65549,
+		65565,
+		65568,
+		65566,
+		65569,
+		65567,
+		65570,
+		65557,
+		65551,
+		65559,
+		65556,
+		65561,
+		65564,
+		65562,
+		65563,
 		65547,
 		65548,
-		65550,
-		65553,
-		65551,
-		65552,
-		65545,
-		65546,
 		65543,
 		65542,
 		102,
 		65537,
 		1,
-		101
+		4,
+		3,
+		2,
+		5,
+		101,
+		65544,
+		65545
 	}
 	,
 	{

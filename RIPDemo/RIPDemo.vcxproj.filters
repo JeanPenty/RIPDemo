@@ -29,6 +29,13 @@
     <ClCompile Include="RIPDemo.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="RIPipeline.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="RIPTest.cpp">
+      <Filter>Source Files</Filter>
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="MainDlg.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,6 +62,13 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RIPipeline.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RIPParams.h">
+      <Filter>Header Files</Filter>
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">

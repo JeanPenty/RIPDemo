@@ -15,6 +15,9 @@ using namespace SNS;
 
 #include "CGlobalUnits.h"
 
+// 控制台自测入口（定义在 RIPTest.cpp），非 --riptest 模式返回 -1
+int HandleRipTestCommandLine(const wchar_t* szCmdLine, const wchar_t* szExePath);
+
 //debug时方便调试设置当前目录以便从文件加载资源
 SStringT SetDefaultDir()
 {
@@ -33,6 +36,15 @@ SStringT SetDefaultDir()
 
 int WINAPI _tWinMain(HINSTANCE hInstance, HINSTANCE /*hPrevInstance*/, LPTSTR lpstrCmdLine, int /*nCmdShow*/)
 {
+	// ---- RIP 全链路自测入口（见 RIPTest.cpp）----
+	{
+		TCHAR szExe[MAX_PATH] = { 0 };
+		::GetModuleFileName(NULL, szExe, MAX_PATH);
+		int rc = HandleRipTestCommandLine(lpstrCmdLine, szExe);
+		if (rc >= 0)
+			return rc;
+	}
+
 // 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 // 	_CrtSetBreakAlloc(122756);
 

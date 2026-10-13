@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -142,7 +142,7 @@
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
       <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4_INSTALL_64)\include\components;$(SOUI4_INSTALL_64)\include\SOUI;$(SOUI4_INSTALL_64)\include\SOUI\include;$(SOUI4_INSTALL_64)\include\utilities\include;../lcms/include;../mupdf1.25.4/include;../libtiff\libtiff;../libtiff\build\libtiff;../jemalloc/include;../jemalloc/include/msvc_compat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN64;_WINDOWS;STRICT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN64;_WINDOWS;STRICT;_DEBUG;FZ_DLL_CLIENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BrowseInformation>true</BrowseInformation>
       <Optimization>Disabled</Optimization>
@@ -167,18 +167,32 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <WarningLevel>Level3</WarningLevel>
-      <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4_INSTALL_64)\include\components;$(SOUI4_INSTALL_64)\include\SOUI;$(SOUI4_INSTALL_64)\include\SOUI\include;$(SOUI4_INSTALL_64)\include\utilities\include;../lcms/include;../mupdf1.25.4/include;../libtiff\libtiff;../libtiff\build\libtiff;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-      <PreprocessorDefinitions>WIN64;_WINDOWS;NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4_INSTALL_64)\include\components;$(SOUI4_INSTALL_64)\include\SOUI;$(SOUI4_INSTALL_64)\include\SOUI\include;$(SOUI4_INSTALL_64)\include\utilities\include;../lcms/include;../mupdf1.25.4/include;../libtiff\libtiff;../libtiff\build\libtiff;../jemalloc/include;../jemalloc/include/msvc_compat;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN64;_WINDOWS;NDEBUG;FZ_DLL_CLIENT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <Optimization>MaxSpeed</Optimization>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <StringPooling>true</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <EnableEnhancedInstructionSet>AdvancedVectorExtensions2</EnableEnhancedInstructionSet>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <WholeProgramOptimization>true</WholeProgramOptimization>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\release;../lcms/lib/release;../mupdf1.25.4/lib/release;../libtiff\build\libtiff\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>utilities4.lib;soui4.lib;imgdecoder-gdip.lib;imgdecoder-stb.lib;aupng.lib;imgdecoder-wic.lib;log4z.lib;render-d2d.lib;render-gdi.lib;render-skia.lib;skia.lib;resprovider-7zip.lib;7z.lib;resprovider-zip.lib;zlib.lib;scriptmodule-lua.lib;lua-54.lib;translator.lib;lcms2.lib;libmupdf.lib;tiffd.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SOUI4_INSTALL_64)\lib\release;../lcms/lib/release;../mupdf1.25.4/lib/release;../libtiff\build\libtiff\Release;../jemalloc/lib/release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>utilities4.lib;soui4.lib;imgdecoder-gdip.lib;imgdecoder-stb.lib;aupng.lib;imgdecoder-wic.lib;log4z.lib;render-d2d.lib;render-gdi.lib;render-skia.lib;skia.lib;resprovider-7zip.lib;7z.lib;resprovider-zip.lib;zlib.lib;scriptmodule-lua.lib;lua-54.lib;translator.lib;lcms2_static.lib;libmupdf.lib;tiff.lib;jemalloc.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
     </Link>
+    <PostBuildEvent>
+      <Command>call "$(ProjectDir)..\_stage_rel.bat" "$(OutDir)"</Command>
+    </PostBuildEvent>
     <ResourceCompile>
       <Culture>0x0804</Culture>
       <AdditionalIncludeDirectories>$(SOUI4_INSTALL_64)\include\config;$(SOUI4PATH)\soui-sys-resource;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -194,6 +208,9 @@
     <ClCompile Include="FuncTimer.cpp" />
     <ClCompile Include="MainDlg.cpp" />
     <ClCompile Include="RIPDemo.cpp" />
+    <ClCompile Include="RIPConfig.cpp" />
+    <ClCompile Include="RIPipeline.cpp" />
+    <ClCompile Include="RIPTest.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
@@ -211,6 +228,9 @@
     <ClInclude Include="FuncTimer.h" />
     <ClInclude Include="MainDlg.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="RIPConfig.h" />
+    <ClInclude Include="RIPipeline.h" />
+    <ClInclude Include="RIPParams.h" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>

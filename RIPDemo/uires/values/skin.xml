@@ -20,4 +20,8 @@
 	<imglist name="skin_menu_itemskin" src="PNG:IDB_MENU_ITEMSKIN" states="2"/>
 
 	<imglist name="skin_cbx_btn" src="PNG:IDB_COMMON_BTN_CBX" states="3" />
+
+	<!-- RIP 进度条: 轨道 + 已完成填充(纯色矩形, 不需要图片资源) -->
+	<colorrect name="skin_prog_rail" normal="#1A1F2E" cornerRadius="4"/>
+	<colorrect name="skin_prog_fill" normal="#3B82F6" cornerRadius="4"/>
 </skin>
