@@ -1,10 +1,10 @@
-﻿<SOUI name="mainWindow"
+﻿﻿<SOUI name="mainWindow"
 	  title="@string/title"
 	  bigIcon="ICON_LOGO:32"
 	  smallIcon="ICON_LOGO:16"
 	  width="1200"
-      height="800"
-      minsize="1200,800"
+      height="900"
+      minsize="1200,900"
 	  resizable="1"
 	  wndType="appMain"
 	  appWnd="1"
@@ -21,7 +21,7 @@
 							<menuItem src="SMENU:menu_file">文件(F)</menuItem>
 						</menus>
 					</menubar>
-					<text pos="[10,0,@100,@50" align="left" valign="center" font="face:微软雅黑,size:12,bold:1" >ZL RIP</text>
+					<text pos="[10,0,@100,@50" align="left" valign="center" font="face:微软雅黑,size:12,bold:1" >RIPPER</text>
 					
 					<imgbtn name="btn_close" pos="-30,0" skin="skin_btn_close" tip="关闭"/>
 					<imgbtn name="btn_max" pos="-70,0" skin="skin_btn_max" show="1" tip="最大化"/>
@@ -29,11 +29,12 @@
 					<imgbtn name="btn_min" pos="-100,0" skin="skin_btn_min" tip="最小化"/>
 				</caption>
 				<caption pos="0,[0,-0,-0" layout="hbox" colorBkgnd="#0B0F19">
-					<caption weight="1" size="-1,-2">
+					<caption weight="2" size="-1,-2">
 						<listview pos="0,0,-5,-88" name="lv_rip_task" headHeight="0" colorBkgnd="#1A1F2E" focuable="0" sbSkin="skin_scrollbar" sbWid="8">
 							<template itemHeight="40"  skin="" colorNormal="#1A1F2E" colorHover="#2D2D30" colorSelected="#00000030" 
 									  trackMouseEvent="1" font="face:微软雅黑,size:12,adding:1" cursor="hand">
-								<text name="item_name" pos="15,0,-15,-0" align="left" valign="center" dotted="1" colorText="#FFFFFF" />
+								<check name="item_check" pos="10,0,@30,-0" valign="center" focusable="0" tip="勾选后才参与「开始RIP」" />
+								<text name="item_name" pos="[8,0,-15,-0" align="left" valign="center" dotted="1" colorText="#FFFFFF" />
 							</template>
 						</listview>
 
@@ -80,14 +81,15 @@
 
 						<check name="check_spot" pos="[50,{7" focusable="0" colorText="#FFFFFF">专色分离</check>
 
-						<check name="check_gray2k" pos="20,[15" focusable="0" colorText="#FFFFFF" tip="黑色/灰色只用黑版表达,剔除CMY,黑字不再有彩色毛边">灰色只用K</check>
-						<text pos="[30,{0,@60,@30" colorText="#FFFFFF" tip="0=关闭,100=完全硬切;消除文字边缘抗锯齿毛边,图片类内容慎用">锐化:</text>
+						<check name="check_gray2k" pos="20,[25" focusable="0" colorText="#FFFFFF" tip="黑色/灰色只用黑版表达,剔除CMY,黑字不再有彩色毛边">灰色只用K</check>
+						
+						<text pos="20,[20,@80,@30" colorText="#FFFFFF" tip="0=关闭,100=完全硬切;消除文字边缘抗锯齿毛边,图片类内容慎用">锐化:</text>
 						<edit name="edit_noaa" pos="[0,{0,@70,@30"
 							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
 							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
 						<check name="check_noaa" pos="[20,{7" focusable="0" colorText="#FFFFFF" tip="对墨量做S曲线压掉边缘过渡灰阶;图片类内容慎用">去毛边</check>
 
-						<text pos="20,[15,@70,@30" colorText="#FFFFFF" tip="喷头板卡 PRN 容器格式: PRN1RipHeader(256字节头, 行内 K,C,M,Y) 或 PRN2RipHeader(48字节头, 行内 C,M,Y,K); 每页额外落一份 .prn, 专色版不参与">输出PRN:</text>
+						<text pos="20,[15,@80,@30" colorText="#FFFFFF" tip="喷头板卡 PRN 容器格式: PRN1RipHeader(256字节头, 行内 K,C,M,Y) 或 PRN2RipHeader(48字节头, 行内 C,M,Y,K); 每页额外落一份 .prn, 专色版不参与">输出PRN:</text>
 						<combobox name="cb_prn" pos="[0,{0,@170,@30"
 								  colorText="#FFFFFF"
 								  btnSkin="skin_cbx_btn"
@@ -110,7 +112,7 @@
 							</items>
 						</combobox>
 
-						<text pos="20,[15,@60,@30" colorText="#FFFFFF" tip="FS=Floyd-Steinberg误差扩散,层次最细腻(默认); 有序网屏=4x4网点,网点规整稳定; 纯阈值=不出网">抖动:</text>
+						<text pos="20,[15,@80,@30" colorText="#FFFFFF" tip="FS=Floyd-Steinberg误差扩散,层次最细腻(默认); 有序网屏=4x4网点,网点规整稳定; 纯阈值=不出网">抖动:</text>
 						<combobox name="cb_dither" pos="[0,{0,@130,@30"
 								  colorText="#FFFFFF"
 								  btnSkin="skin_cbx_btn"
@@ -134,7 +136,7 @@
 						</combobox>
 						<check name="check_fsserp" pos="[20,{7" focusable="0" colorText="#FFFFFF" tip="蛇形扫描: 逐行来回走,消除单向拖尾纹理(仅FS有效)">FS蛇形</check>
 
-						<text pos="20,[15,@90,@30" colorText="#FFFFFF" tip="页级并行处理线程数: 0=自动(按CPU核心数,最多8); 1=串行。线程越多占用内存越多">线程数:</text>
+						<text pos="20,[15,@80,@30" colorText="#FFFFFF" tip="页级并行处理线程数: 0=自动(按CPU核心数,最多8); 1=串行。线程越多占用内存越多">线程数:</text>
 						<edit name="edit_threads" pos="[0,{0,@70,@30"
 							  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
 							  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
@@ -150,7 +152,7 @@
 						</group>
 
 						<group pos="20,[10,-5,@60" text="输出根目录（留空 = 跟随 PDF 所在目录）" colorText="#FFFFFF" align="left" headerHeight="20">
-							<edit name="edit_outroot" pos="10,0,-115,@30"
+							<edit name="edit_outroot" pos="10,0,-100,@30"
 								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
 								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"
 								  tip="大作业输出动辄几十 GB，可指到数据盘；输出写到 该目录 / RIP_Out / PDF文件名 / ；留空则写到 PDF 同级目录"/>
@@ -181,12 +183,30 @@
 								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
 								  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
 						</group>
-						<group pos="20,[10,-5,@165" text="墨点统计（第 1 页 · 大/中/小点）" colorText="#FFFFFF" align="left" headerHeight="20">
-							<text name="dot_line_c" pos="10,2,-10,@20" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" />
+						<group pos="20,[10,-5,@232" text="墨点统计（第 1 页 · 点数 / 耗墨量）" colorText="#FFFFFF" align="left" headerHeight="20">
+							<text pos="10,4,@56,@22" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" tip="每颗墨滴的体积(皮升 pL), 按实际喷头规格填(常见: 小点1.5~4, 中点5~9, 大点12~30); 改完点一下别处即刻重算">小点pL:</text>
+							<edit name="edit_drop_small_pl" pos="[2,{0,@54,@22" 
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+									  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+							<text pos="[12,{0,@56,@22" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left">中点pL:</text>
+							<edit name="edit_drop_mid_pl" pos="[2,{0,@54,@22" 
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+									  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+							<text pos="[12,{0,@56,@22" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left">大点pL:</text>
+							<edit name="edit_drop_big_pl" pos="[2,{0,@54,@22" 
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+									  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+							<text pos="[12,{0,@84,@22" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" tip="墨水单价(元/毫升): 总墨量(mL) x 单价 = 墨水成本, 改完点一下别处即刻重算; 填 0 表示不统计成本">墨价¥/mL:</text>
+							<edit name="edit_ink_price_ml" pos="[2,{0,@70,@22" 
+								  colorBkgnd="#1A1F2E" align="left" valign="center" colorBorder="#FFFFFF30" ncSkin="" margin="1"
+									  inset="5,0,5,0" font="face:微软雅黑,size:12" autoWordSel="0" colorText="#FFFFFF"/>
+
+							<text name="dot_line_c" pos="10,[10,-10,@20" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" />
 							<text name="dot_line_m" pos="10,[0,-10,@20" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" />
 							<text name="dot_line_y" pos="10,[0,-10,@20" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" />
 							<text name="dot_line_k" pos="10,[0,-10,@20" colorText="#FFFFFF" font="face:微软雅黑,size:12" align="left" />
 							<text name="dot_line_sum" pos="10,[4,-10,@20" colorText="#3B82F6" font="face:微软雅黑,size:12,bold:1" align="left" />
+							<text name="dot_price" pos="10,[4,-10,@20" colorText="#F59E0B" font="face:微软雅黑,size:12,bold:1" align="left" />
 							<text name="dot_tip" pos="10,[4,-10,@34" colorText="#8A94A6" font="face:微软雅黑,size:11" align="left" wordBreak="1" />
 						</group>
 					</caption>

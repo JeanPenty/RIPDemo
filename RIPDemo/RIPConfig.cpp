@@ -71,6 +71,12 @@ namespace
 		if (s.empty()) return nDef;
 		return std::atoi(s.c_str());
 	}
+
+	double ToDouble(const std::string& s, double dDef)
+	{
+		if (s.empty()) return dDef;
+		return std::atof(s.c_str());
+	}
 }
 
 std::string RIPConfig::GetConfigPath()
@@ -150,6 +156,25 @@ bool RIPConfig::Save(const RIPParams& params)
 	s += "input_icc=" + params.m_strInputICC + "\n";
 	s += "dump_dir=" + params.m_strDumpDir + "\n";
 	s += "output_root=" + params.m_strOutputRoot + "\n";
+	sprintf_s(szBuf, sizeof(szBuf), "drop_small_pl=%.4f\n", params.DropSmallPL());
+	s += szBuf;
+	sprintf_s(szBuf, sizeof(szBuf), "drop_mid_pl=%.4f\n", params.DropMidPL());
+	s += szBuf;
+	sprintf_s(szBuf, sizeof(szBuf), "drop_big_pl=%.4f\n", params.DropBigPL());
+	s += szBuf;
+	sprintf_s(szBuf, sizeof(szBuf), "ink_price_ml=%.6f\n", params.InkPricePerML());
+	s += szBuf;
+
+	// 作业列表(左侧列表): task_list_0 / task_list_1 / ... 下标顺序即列表顺序
+	sprintf_s(szBuf, sizeof(szBuf), "task_count=%d\n", (int)params.m_vecTaskList.size());
+	s += szBuf;
+	for (size_t i = 0; i < params.m_vecTaskList.size(); ++i)
+	{
+		sprintf_s(szBuf, sizeof(szBuf), "task_list_%d=", (int)i);
+		s += szBuf;
+		s += params.m_vecTaskList[i];
+		s += "\n";
+	}
 
 	FILE* fp = _wfopen(RIPExt::Utf8ToWString(strPath).c_str(), L"wb");
 	if (!fp) return false;
@@ -303,6 +328,31 @@ bool RIPConfig::Load(RIPParams& params)
 		else if (strKey == "output_root")
 		{
 			params.m_strOutputRoot = strVal;
+		}
+		else if (strKey == "drop_small_pl")
+		{
+			const double v = ToDouble(strVal, 2.0);
+			params.m_dDropSmallPL = (v < 0.0) ? 0.0 : v;
+		}
+		else if (strKey == "drop_mid_pl")
+		{
+			const double v = ToDouble(strVal, 6.0);
+			params.m_dDropMidPL = (v < 0.0) ? 0.0 : v;
+		}
+		else if (strKey == "drop_big_pl")
+		{
+			const double v = ToDouble(strVal, 12.0);
+			params.m_dDropBigPL = (v < 0.0) ? 0.0 : v;
+		}
+		else if (strKey == "ink_price_ml")
+		{
+			const double v = ToDouble(strVal, 0.0);
+			params.m_dInkPricePerML = (v < 0.0) ? 0.0 : v;
+		}
+		else if (strKey.compare(0, 10, "task_list_") == 0)
+		{
+			// 作业列表: 下标顺序即列表顺序; task_count 只作人读参考, 不依赖它
+			if (!strVal.empty()) params.m_vecTaskList.push_back(strVal);
 		}
 	}
 

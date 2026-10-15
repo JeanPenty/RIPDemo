@@ -8,10 +8,9 @@
 		  itemSkin="skin_menu_itemskin" 
 		  colorText="#FFFFFF" font="face:微软雅黑,size:12">
 	<menuItem id="1" name="menu_file_addfile" text="添加文件"/>
-	<sep/>
 	<menuItem id="2" name="menu_file_riprun" text="开始RIP"/>
 	<menuItem id="5" name="menu_file_stoprip" text="停止处理"/>
-	<sep/>
 	<menuItem id="3" name="menu_file_removefile" text="删除选中"/>
 	<menuItem id="4" name="menu_file_clearfile" text="清空列表"/>
+	<menuItem id="6" name="menu_file_checkall" text="全选 / 全不选"/>
 </menuRoot>

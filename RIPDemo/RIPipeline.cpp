@@ -632,34 +632,15 @@ namespace
 	//   FS 权重: 右 7/16, 左下 3/16, 下 5/16, 右下 1/16
 	// ------------------------------------------------------------------
 	// ========================================================================
-	// 墨点统计: 把一版位图的出墨像素按 8 连通聚成一个个「点」, 按等效直径分档
+	// 墨点统计: 按像素级别统计 —— 每个出墨像素就是一发墨滴
 	//
-	//   1bit: 出墨 = 1
-	//   2bit: 出墨 = 值 != 0 (1/2/3 都算一个点, 只是墨量不同)
+	//   1bit: 出墨 = 1, 二值图只有「打点 / 不打点」-> 全部记成大点
+	//   2bit: 像素值本身就是墨滴大小档位, 1=小点 2=中点 3=大点
 	//
-	// 算法 = 游程(run) + 并查集单遍标记:
-	//   - 每行只提取「出墨游程」, 全 0 的字节直接跳过, 上亿像素的页也很快
-	//   - 相邻两行游程的 x 区间有交叠(8 连通, 端点允许错开 1 像素)就合并
-	//   - 一个连通域不再延续到下一行时立刻结算面积并回收槽位,
-	//     所以槽位池只跟「单行游程数」有关, 跟页高无关(不会随页高膨胀)
+	// 旧版按 8 连通聚成「网点」再按等效直径分档: 实地大色块(如满版红底)
+	// 会连成一个连通域, 几万像素只算 1 个点, 点数与耗墨量都严重失真, 已废弃。
 	// ========================================================================
-	struct DotSlot
-	{
-		int       m_nParent = -1;   // 父槽位(仅 m_nState==2 时有效)
-		long long m_nArea = 0;      // 仅根槽位有效: 该连通域的像素数
-		int       m_nState = 0;     // 0=空闲 1=根 2=已并入别的根
-		int       m_nGen = 0;       // 最后一次被引用的行号+1
-	};
-
-	struct DotRun
-	{
-		int m_nX0 = 0;
-		int m_nX1 = 0;
-		int m_nId = -1;             // 所属连通域槽位
-	};
-
-	void CollectDotStatPlane(const RIPPlane& plane, int nDpi,
-							 int nSmallUM, int nMidUM, RIPDotStat& out)
+	void CollectDotStatPlane(const RIPPlane& plane, RIPDotStat& out)
 	{
 		out.m_nDotsSmall = out.m_nDotsMid = out.m_nDotsBig = 0;
 		out.m_nDots = out.m_nInkPixels = out.m_nMaxArea = 0;
@@ -670,279 +651,79 @@ namespace
 		const unsigned char* pBits = plane.m_vecBits.data();
 		if (w <= 0 || h <= 0 || stride <= 0 || !pBits) return;
 
-		const int bit = (plane.m_nBit == 2) ? 2 : 1;
-		if (nDpi < 1) nDpi = 1;
-		if (nSmallUM <= 0) nSmallUM = 100;
-		if (nMidUM <= nSmallUM) nMidUM = nSmallUM * 2;
-
-		// 分档面积阈值: 等效直径 d(um) 的圆面积(像素)
-		//   area = PI/4 * (d * dpi / 25400)^2
-		const double fPxPerUM = (double)nDpi / 25400.0;
-		const double fPi4 = 3.14159265358979323846 / 4.0;
-		double fAreaSmall = fPi4 * ((double)nSmallUM * fPxPerUM) * ((double)nSmallUM * fPxPerUM);
-		double fAreaMid = fPi4 * ((double)nMidUM * fPxPerUM) * ((double)nMidUM * fPxPerUM);
-		if (fAreaSmall < 1.0) fAreaSmall = 1.0;
-		if (fAreaMid < fAreaSmall + 1.0) fAreaMid = fAreaSmall + 1.0;
-
-		std::vector<DotSlot> vecSlot;
-		std::vector<int>     vecFree;
-		std::vector<int>     vecFreePending2;  // 上一行废弃的槽位: 隔一行才允许复用,
-		                                      // 因为上一行的旧 id 还会在下一行被引用
-		std::vector<int>     vecFreePending;   // 本行已废弃的槽位: 延迟到行末才放回,
-		                                      // 否则同一行内被 NewSlot 复用, 会让上一行
-		                                      // 窗口外的旧 id 指到别的连通域上去
-
-		std::vector<DotRun>  vecPrev, vecCur;
-		vecSlot.reserve(4096);
-
-		// ---- 槽位池 ----
-		auto NewSlot = [&]() -> int
+		if (plane.m_nBit == 2)
 		{
-			int id;
-			if (!vecFree.empty()) { id = vecFree.back(); vecFree.pop_back(); }
-			else { id = (int)vecSlot.size(); vecSlot.push_back(DotSlot()); }
-			DotSlot& s = vecSlot[id];
-			s.m_nParent = -1; s.m_nArea = 0; s.m_nState = 1; s.m_nGen = 0;
-			return id;
-		};
-		auto FreeSlot = [&](int id)
-		{
-			if (id < 0) return;
-			vecSlot[id].m_nParent = -1;
-			vecSlot[id].m_nArea = 0;
-			vecSlot[id].m_nState = 0;
-			vecFree.push_back(id);
-		};
-		// 同 FreeSlot, 但槽位只进「本行待回收」列表: 本行内绝不复用
-		auto RetireSlot = [&](int id)
-		{
-			if (id < 0) return;
-			vecSlot[id].m_nParent = -1;
-			vecSlot[id].m_nArea = 0;
-			vecSlot[id].m_nState = 3;   // 已结算: FindSlot 到这里返回 -1
-			vecFreePending.push_back(id);
-		};
-		auto FindSlot = [&](int id) -> int
-		{
-			while (id >= 0 && vecSlot[id].m_nState == 2) id = vecSlot[id].m_nParent;
-			if (id >= 0 && vecSlot[id].m_nState != 1) return -1;   // 空闲 / 已废弃
-			return id;
-		};
-		// 合并两个连通域(都必须是活着的), 返回合并后的根
-		auto MergeSlot = [&](int a, int b) -> int
-		{
-			a = FindSlot(a); b = FindSlot(b);
-			if (a < 0) return b;
-			if (b < 0) return a;
-			if (a == b) return a;
-			if (vecSlot[a].m_nArea < vecSlot[b].m_nArea) { int t = a; a = b; b = t; }
-			vecSlot[a].m_nArea += vecSlot[b].m_nArea;
-			// b 立刻回收: 合并窗口内所有指向 b 的引用马上会被统一改写成 a,
-			// 窗口之外(上一行的相邻游程)即便还写着 b, 它在本次结算里 Find 到 -1 会直接跳过,
-			// 而 b 的像素数已经并入 a, 不会丢。
-			// 只挂链, 不立即回收: 上一行里可能还有(扫描窗口之外的)旧 id 指向 b,
-			// 那些位置要靠 FindSlot 顺着 parent 走到 a。立即回收会让它们
-			// Find 到 -1, 于是与上一行明明相连的一段被当成新连通域 —— 点会被拆开。
-			vecSlot[b].m_nArea = 0;
-			vecSlot[b].m_nState = 2;          // 已并入 a
-			vecSlot[b].m_nParent = a;
-			vecFreePending.push_back(b);      // 行末真正回收
-
-			return a;
-		};
-
-		int nGen = 0;
-		for (int y = 0; y < h; ++y)
-		{
-			++nGen;
-			const unsigned char* pRow = pBits + (size_t)y * stride;
-
-			// ---- 1. 提取本行的出墨游程 ----
-			vecCur.clear();
-			int nPrevIdx = -1;      // 本行上一段的游程下标(用于跨字节拼接)
-			if (bit == 1)
+			// 2bit: 每字节 4 像素, 256 项查找表一次算 4 个像素(顺序无关, 只数级别)
+			unsigned char tabS[256], tabM[256], tabB[256];
+			for (int v = 0; v < 256; ++v)
 			{
-				for (int bx = 0; bx < stride; ++bx)
+				int s = 0, m = 0, b = 0;
+				for (int k = 0; k < 4; ++k)
 				{
-					unsigned int bv = pRow[bx];
+					const int lv = (v >> (k << 1)) & 3;
+					if (lv == 1) ++s; else if (lv == 2) ++m; else if (lv == 3) ++b;
+				}
+				tabS[v] = (unsigned char)s;
+				tabM[v] = (unsigned char)m;
+				tabB[v] = (unsigned char)b;
+			}
+
+			const int nFull = w >> 2;    // 完整字节数(4 像素/字节)
+			const int nTail = w & 3;     // 末尾不足 4 像素的部分
+			for (int y = 0; y < h; ++y)
+			{
+				const unsigned char* pRow = pBits + (size_t)y * stride;
+				for (int bx = 0; bx < nFull; ++bx)
+				{
+					const unsigned int bv = pRow[bx];
 					if (!bv) continue;
-					const int xBase = bx << 3;
-					int x = 0;
-					while (x < 8)
+					out.m_nDotsSmall += tabS[bv];
+					out.m_nDotsMid   += tabM[bv];
+					out.m_nDotsBig   += tabB[bv];
+				}
+				// 行尾单独数(防止 padding 位有脏数据)
+				if (nTail)
+				{
+					unsigned int bv = pRow[nFull];
+					for (int k = 0; k < nTail; ++k, bv >>= 2)
 					{
-						if (bv & (0x80u >> x))
+						switch (bv & 3)
 						{
-							const int x0 = xBase + x;
-							while (x < 8 && (bv & (0x80u >> x))) ++x;
-							int x1 = xBase + x - 1;
-							if (x1 >= w) x1 = w - 1;
-							if (x0 < w)
-							{
-								// 跨字节延续: 同一行的出墨段不能被字节边界切成两截
-								if (nPrevIdx >= 0 && vecCur[nPrevIdx].m_nX1 + 1 == x0)
-									vecCur[nPrevIdx].m_nX1 = x1;
-								else
-								{
-									DotRun r; r.m_nX0 = x0; r.m_nX1 = x1; r.m_nId = -1;
-									vecCur.push_back(r);
-									nPrevIdx = (int)vecCur.size() - 1;
-								}
-							}
+						case 1: ++out.m_nDotsSmall; break;
+						case 2: ++out.m_nDotsMid;   break;
+						case 3: ++out.m_nDotsBig;   break;
 						}
-						else ++x;
 					}
 				}
 			}
-			else
+		}
+		else
+		{
+			// 1bit: 打点/不打点, 出墨像素全部记成大点(耗墨量按大点 pL)
+			unsigned char tabPop[256];
+			tabPop[0] = 0;
+			for (int v = 1; v < 256; ++v)
+				tabPop[v] = (unsigned char)((v & 1) + tabPop[v >> 1]);
+
+			const int nFull = w >> 3;    // 完整字节数(8 像素/字节)
+			const int nTail = w & 7;
+			for (int y = 0; y < h; ++y)
 			{
-				for (int bx = 0; bx < stride; ++bx)
+				const unsigned char* pRow = pBits + (size_t)y * stride;
+				for (int bx = 0; bx < nFull; ++bx)
+					out.m_nDotsBig += tabPop[pRow[bx]];
+				if (nTail)
 				{
-					unsigned int bv = pRow[bx];
-					if (!bv) continue;
-					const int xBase = bx << 2;
-					int x = 0;
-					while (x < 4)
-					{
-						if ((bv >> (6 - (x << 1))) & 3u)
-						{
-							const int x0 = xBase + x;
-							while (x < 4 && (((bv >> (6 - (x << 1))) & 3u) != 0)) ++x;
-							int x1 = xBase + x - 1;
-							if (x1 >= w) x1 = w - 1;
-							if (x0 < w)
-							{
-								// 跨字节延续: 同一行的出墨段不能被字节边界切成两截
-								if (nPrevIdx >= 0 && vecCur[nPrevIdx].m_nX1 + 1 == x0)
-									vecCur[nPrevIdx].m_nX1 = x1;
-								else
-								{
-									DotRun r; r.m_nX0 = x0; r.m_nX1 = x1; r.m_nId = -1;
-									vecCur.push_back(r);
-									nPrevIdx = (int)vecCur.size() - 1;
-								}
-							}
-						}
-						else ++x;
-					}
+					unsigned int bv = pRow[nFull];
+					for (int k = 0; k < nTail; ++k, bv >>= 1)
+						if (bv & 1) ++out.m_nDotsBig;
 				}
 			}
-
-			const int nc = (int)vecCur.size();
-			for (int c = 0; c < nc; ++c)
-				out.m_nInkPixels += (long long)(vecCur[c].m_nX1 - vecCur[c].m_nX0 + 1);
-
-			// ---- 2. 与上一行游程做 8 连通合并 ----
-			if (nc > 0)
-			{
-				const int np = (int)vecPrev.size();
-				int i = 0;
-				for (int c = 0; c < nc; ++c)
-				{
-					DotRun& r = vecCur[c];
-					// 游标只前进: 上一行里右端够不到本游程的全跳过
-					while (i < np && vecPrev[i].m_nX1 + 1 < r.m_nX0) ++i;
-
-					const int iStart = i;
-					int j = i;
-					int nRoot = -1;
-					while (j < np && vecPrev[j].m_nX0 <= r.m_nX1 + 1)
-					{
-						const int rr = FindSlot(vecPrev[j].m_nId);
-						if (rr >= 0)
-							nRoot = (nRoot < 0) ? rr : MergeSlot(nRoot, rr);
-						++j;
-					}
-
-					// 命中窗口内的引用统一改写成最终根:
-					// 槽位回收后若还留着旧 id, 会指到别的连通域上去
-					if (nRoot >= 0)
-					{
-						for (int jj = iStart; jj < j; ++jj)
-							vecPrev[jj].m_nId = nRoot;
-					}
-					else
-					{
-						nRoot = NewSlot();      // 与上一行不相连 -> 新连通域
-					}
-
-					r.m_nId = nRoot;
-					vecSlot[nRoot].m_nArea += (long long)(r.m_nX1 - r.m_nX0 + 1);
-
-					// j-1 那个游程还可能和下一个 cur 游程重叠, 游标停在它上面
-					if (j > iStart) i = j - 1;
-				}
-			}
-
-			// 本行引用到的连通域标记成「本行有效」
-			for (int c = 0; c < nc; ++c)
-			{
-				const int rr = FindSlot(vecCur[c].m_nId);
-				if (rr >= 0) vecSlot[rr].m_nGen = nGen;
-			}
-
-			// ---- 3. 上一行里本行没引用到的连通域 -> 已结束, 结算 ----
-			for (size_t j = 0; j < vecPrev.size(); ++j)
-			{
-				const int rr = FindSlot(vecPrev[j].m_nId);
-				if (rr < 0) continue;
-				if (vecSlot[rr].m_nGen == nGen) continue;   // 本行还在延续
-				vecSlot[rr].m_nGen = nGen;                  // 标记已结算, 防重复
-
-				const long long area = vecSlot[rr].m_nArea;
-				if (area > 0)
-				{
-					if (area > out.m_nMaxArea) out.m_nMaxArea = area;
-					const double fArea = (double)area;
-					if (fArea < fAreaSmall)      ++out.m_nDotsSmall;
-					else if (fArea < fAreaMid)   ++out.m_nDotsMid;
-					else                         ++out.m_nDotsBig;
-					++out.m_nDots;
-				}
-				RetireSlot(rr);
-			}
-
-			// 行末统一回收本行废弃的槽位
-			if (!vecFreePending.empty())
-			{
-				// 上一行(隔了一整行)释放的槽位, 现在才允许复用
-				for (size_t f = 0; f < vecFreePending2.size(); ++f)
-				{
-					const int fid = vecFreePending2[f];
-					vecSlot[fid].m_nState = 0;
-					vecSlot[fid].m_nParent = -1;
-					vecFree.push_back(fid);
-				}
-				vecFreePending2.clear();
-				vecFreePending2.swap(vecFreePending);
-				vecFreePending.clear();
-			}
-
-			vecPrev.swap(vecCur);
 		}
 
-		// ---- 4. 最后一行之后还在延续的连通域全部结算 ----
-		//    ++nGen: 换一个"代", 这样所有存活连通域都满足「本代未被引用」,
-		//    再用同一个 m_nGen 标记做去重(同一个根在 vecPrev 里可能出现多次)
-		++nGen;
-		for (size_t j = 0; j < vecPrev.size(); ++j)
-		{
-			const int rr = FindSlot(vecPrev[j].m_nId);
-			if (rr < 0) continue;
-			if (vecSlot[rr].m_nGen == nGen) continue;
-			vecSlot[rr].m_nGen = nGen;
-
-			const long long area = vecSlot[rr].m_nArea;
-			if (area > 0)
-			{
-				if (area > out.m_nMaxArea) out.m_nMaxArea = area;
-				const double fArea = (double)area;
-				if (fArea < fAreaSmall)      ++out.m_nDotsSmall;
-				else if (fArea < fAreaMid)   ++out.m_nDotsMid;
-				else                         ++out.m_nDotsBig;
-				++out.m_nDots;
-			}
-			FreeSlot(rr);
-		}
+		out.m_nDots = out.m_nDotsSmall + out.m_nDotsMid + out.m_nDotsBig;
+		out.m_nInkPixels = out.m_nDots;   // 每个出墨像素就是一发墨滴, 两者相等
+		// m_nMaxArea 在像素口径下不再有意义, 恒为 0(字段保留只为兼容旧 ini)
 	}
 
 	bool DitherBandRows(const std::vector<RIPGrayPlane>& vecGray,
@@ -1796,8 +1577,7 @@ bool RIPipeline::RunPage(const std::string& strPdfPath,
 			{
 				RIPDotStat& ds = out.m_vecDotStats[k];
 				ds.m_strInk = out.m_vecInkNames[k];
-				CollectDotStatPlane(out.m_vecPlanes[k], params.YDpi(),
-									params.m_nDotSmallUM, params.m_nDotMidUM, ds);
+				CollectDotStatPlane(out.m_vecPlanes[k], ds);
 			}
 		}
 

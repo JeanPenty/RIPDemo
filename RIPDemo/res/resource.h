@@ -1,4 +1,4 @@
-﻿//stamp:0d0beb39f8b60fce
+﻿//stamp:0d0bef2bbe654742
 /*<------------------------------------------------------------------------------------------------->*/
 /*该文件由uiresbuilder生成，请不要手动修改*/
 /*<------------------------------------------------------------------------------------------------->*/
@@ -119,8 +119,13 @@ struct _R{
 		 const wchar_t * dot_line_m;
 		 const wchar_t * dot_line_sum;
 		 const wchar_t * dot_line_y;
+		 const wchar_t * dot_price;
 		 const wchar_t * dot_tip;
+		 const wchar_t * edit_drop_big_pl;
+		 const wchar_t * edit_drop_mid_pl;
+		 const wchar_t * edit_drop_small_pl;
 		 const wchar_t * edit_icc_path;
+		 const wchar_t * edit_ink_price_ml;
 		 const wchar_t * edit_noaa;
 		 const wchar_t * edit_outroot;
 		 const wchar_t * edit_threads;
@@ -130,11 +135,13 @@ struct _R{
 		 const wchar_t * edit_threshold_y;
 		 const wchar_t * edit_x_dpi;
 		 const wchar_t * edit_y_dpi;
+		 const wchar_t * item_check;
 		 const wchar_t * item_name;
 		 const wchar_t * lv_rip_task;
 		 const wchar_t * menu_about;
 		 const wchar_t * menu_file;
 		 const wchar_t * menu_file_addfile;
+		 const wchar_t * menu_file_checkall;
 		 const wchar_t * menu_file_clearfile;
 		 const wchar_t * menu_file_removefile;
 		 const wchar_t * menu_file_riprun;
@@ -163,8 +170,13 @@ struct _R{
 		int dot_line_m;
 		int dot_line_sum;
 		int dot_line_y;
+		int dot_price;
 		int dot_tip;
+		int edit_drop_big_pl;
+		int edit_drop_mid_pl;
+		int edit_drop_small_pl;
 		int edit_icc_path;
+		int edit_ink_price_ml;
 		int edit_noaa;
 		int edit_outroot;
 		int edit_threads;
@@ -174,11 +186,13 @@ struct _R{
 		int edit_threshold_y;
 		int edit_x_dpi;
 		int edit_y_dpi;
+		int item_check;
 		int item_name;
 		int lv_rip_task;
 		int menu_about;
 		int menu_file;
 		int menu_file_addfile;
+		int menu_file_checkall;
 		int menu_file_clearfile;
 		int menu_file_removefile;
 		int menu_file_riprun;
@@ -223,8 +237,13 @@ struct _R R={
 		L"dot_line_m",
 		L"dot_line_sum",
 		L"dot_line_y",
+		L"dot_price",
 		L"dot_tip",
+		L"edit_drop_big_pl",
+		L"edit_drop_mid_pl",
+		L"edit_drop_small_pl",
 		L"edit_icc_path",
+		L"edit_ink_price_ml",
 		L"edit_noaa",
 		L"edit_outroot",
 		L"edit_threads",
@@ -234,11 +253,13 @@ struct _R R={
 		L"edit_threshold_y",
 		L"edit_x_dpi",
 		L"edit_y_dpi",
+		L"item_check",
 		L"item_name",
 		L"lv_rip_task",
 		L"menu_about",
 		L"menu_file",
 		L"menu_file_addfile",
+		L"menu_file_checkall",
 		L"menu_file_clearfile",
 		L"menu_file_removefile",
 		L"menu_file_riprun",
@@ -250,47 +271,54 @@ struct _R R={
 	,
 	{
 		65538,
-		65558,
+		65559,
 		65539,
 		65541,
-		65560,
+		65561,
 		65540,
 		65536,
-		65554,
-		65553,
-		65546,
 		65555,
-		65550,
-		65552,
-		65549,
-		65565,
-		65568,
-		65566,
-		65569,
-		65567,
-		65570,
-		65557,
-		65551,
-		65559,
-		65556,
-		65561,
-		65564,
-		65562,
-		65563,
+		65554,
 		65547,
+		65556,
+		65551,
+		65553,
+		65550,
+		65570,
+		65573,
+		65571,
+		65574,
+		65572,
+		65575,
+		65576,
+		65568,
+		65567,
+		65566,
+		65558,
+		65569,
+		65552,
+		65560,
+		65557,
+		65562,
+		65565,
+		65563,
+		65564,
 		65548,
+		65549,
 		65543,
+		65544,
 		65542,
 		102,
 		65537,
 		1,
+		6,
 		4,
 		3,
 		2,
 		5,
 		101,
-		65544,
-		65545
+		65545,
+		65546
 	}
 	,
 	{

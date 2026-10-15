@@ -81,13 +81,25 @@ struct RIPParams
 	int    m_nPrnVersion = 0;
 
 	// ---- 墨点统计(多页 PDF 只统计第 1 页) ----
-	// 把每一版位图里的出墨像素按 8 连通聚成一个个「点」(半色调网点),
-	// 用等效圆直径分三档计数: 小点 / 中点 / 大点。
-	//   等效直径(um) = 2 * sqrt(点面积像素 / PI) * 25400 / DPI
+	// 按像素级别统计: 每个出墨像素就是一发墨滴。
+	//   1bit: 出墨=1, 全部记成大点(打点数=出墨像素数)
+	//   2bit: 像素值即墨滴档位 1=小点 2=中点 3=大点
 	// 结果在 RIPPageResult::m_vecDotStats 里, 界面按「文件」展示。
 	bool   m_bDotStat = true;      // 关掉可省一点统计时间
-	int    m_nDotSmallUM = 100;    // 等效直径 < 100um = 小点
-	int    m_nDotMidUM = 200;      // 等效直径 < 200um = 中点, 再大 = 大点
+	int    m_nDotSmallUM = 100;    // (已废弃, 旧版按 um 分档的参数, 保留兼容 ini)
+	int    m_nDotMidUM = 200;      // (已废弃, 同上)
+
+	// 每颗墨滴的体积(皮升 pL): 用来把点数换算成耗墨量
+	//   耗墨量(pL) = 小点数*小点pL + 中点数*中点pL + 大点数*大点pL
+	// 按实际喷头墨滴规格填(常见: 小点 1.5~4pL, 中点 5~9pL, 大点 12~30pL)
+	double m_dDropSmallPL = 2.0;
+	double m_dDropMidPL   = 6.0;
+	double m_dDropBigPL   = 12.0;
+
+	// 墨水单价(元 / 毫升): 用总耗墨量算印刷成本
+	//   成本(元) = 总耗墨量(mL) * 单价(元/mL)
+	// 只为界面估算, 不参与 RIP 运算; 填 0 表示不统计成本。
+	double m_dInkPricePerML = 0.0;
 
 	bool   m_bNoAA = false;
 	int    m_nNoAAStrength = 50;   // 0~100, 100 = 完全硬切
@@ -95,6 +107,17 @@ struct RIPParams
 	// ---- 中间产物（调试用，默认关）----
 	bool   m_bDumpMergedCMYK = false;
 	std::string m_strDumpDir;
+
+	// ---- 作业列表(左侧列表) ----
+	// 退出/参数变化时把左侧作业列表存下来, 下次启动按它重建(含勾选状态
+	//   与第 1 页墨点统计 -> 重启后选中文件仍能直接算耗墨量/成本, 不必重跑 RIP)。
+	// 每项格式(除路径外全是 ASCII):
+	//   "<0|1>|<路径>|<dpi>|<bit>|<色版数>|<色版统计;...>"
+	//   色版统计 = "<色版名hex>:小点:中点:大点:总点:出墨像素:最大面积"
+	// '|' 不是 Windows 路径的合法字符, 可以安全当分隔符;
+	// 色版名可能是任意字节的专色名, 所以做十六进制编码避开分隔符。
+	// 兼容老配置: 只有前 2 段时视为「无统计」。顺序即列表顺序。
+	std::vector<std::string> m_vecTaskList;
 
 	// 阈值统一压到 [0,255]
 	inline int ThrC() const { return Clamp255(m_nThrC); }
@@ -106,6 +129,10 @@ struct RIPParams
 	inline int NoAAStrength() const { return m_nNoAAStrength < 0 ? 0 : (m_nNoAAStrength > 100 ? 100 : m_nNoAAStrength); }
 	inline int BitDepth() const { return m_nBitDepth == 2 ? 2 : 1; }
 	inline int ThreadCount() const { return m_nThreadCount < 0 ? 0 : (m_nThreadCount > 32 ? 32 : m_nThreadCount); }
+	inline double DropSmallPL() const { return m_dDropSmallPL < 0.0 ? 0.0 : m_dDropSmallPL; }
+	inline double DropMidPL() const { return m_dDropMidPL < 0.0 ? 0.0 : m_dDropMidPL; }
+	inline double DropBigPL() const { return m_dDropBigPL < 0.0 ? 0.0 : m_dDropBigPL; }
+	inline double InkPricePerML() const { return m_dInkPricePerML < 0.0 ? 0.0 : m_dInkPricePerML; }
 	inline int XDpi() const { return m_nXDpi < 1 ? 1 : m_nXDpi; }
 	inline int YDpi() const { return m_nYDpi < 1 ? 1 : m_nYDpi; }
 
@@ -161,7 +188,7 @@ struct RIPPlane
 // 一次 RIP 的结果：4 个 CMYK 平面；专色分离时后面再追加 N 个专色平面
 // ----------------------------------------------------------------------------
 // ----------------------------------------------------------------------------
-// 一个色版的「墨点」统计(把出墨像素按 8 连通聚成点, 按等效直径分档)
+// 一个色版的「墨点」统计(按像素级别: 1bit 全记大点; 2bit L1/L2/L3 = 小/中/大点)
 // ----------------------------------------------------------------------------
 struct RIPDotStat
 {
@@ -170,9 +197,151 @@ struct RIPDotStat
 	long long m_nDotsMid = 0;        // 中点个数
 	long long m_nDotsBig = 0;        // 大点个数
 	long long m_nDots = 0;           // 总点数 = 三档之和
-	long long m_nInkPixels = 0;      // 出墨像素数(参考, 不等于点数)
-	long long m_nMaxArea = 0;        // 最大点的面积(像素), 便于核对分档是否合理
+	long long m_nInkPixels = 0;      // 出墨像素数(像素口径下 = 总点数)
+	long long m_nMaxArea = 0;        // (已废弃, 像素口径下恒为 0; 字段保留兼容旧 ini)
 };
+
+// 由「点数 x 单颗墨滴体积」算耗墨量(皮升 pL)
+//   1 pL = 1e-9 mL = 1e-6 uL; 例: 4000 pL = 4 nL = 0.004 uL
+inline double RIPDotsToPL(const RIPDotStat& d, double dSmallPL, double dMidPL, double dBigPL)
+{
+	return (double)d.m_nDotsSmall * dSmallPL
+	     + (double)d.m_nDotsMid   * dMidPL
+	     + (double)d.m_nDotsBig   * dBigPL;
+}
+
+// 皮升 -> 毫升
+//   1 L = 1e15 pL, 1 mL = 1e-3 L = 1e12 pL  =>  1 pL = 1e-9 mL
+inline double RIPPLToML(double dPL) { return dPL * 1e-9; }
+
+// ----------------------------------------------------------------------------
+// 作业列表项在 ini 里的编码 / 解析
+//   格式(除路径外全是 ASCII):
+//     "<0|1>|<路径>|<dpi>|<bit>|<色版数>|<色版统计;...>"
+//   色版统计 = "<色版名hex>:<小点>:<中点>:<大点>:<总点>:<出墨像素>:<最大面积>"
+//   色版名可能是任意字节的专色名, 做十六进制编码避开 '|' ';' ':' 串扰。
+//   只有前 2 段的老配置视为「无统计」(向后兼容)。
+// ----------------------------------------------------------------------------
+namespace RIPTaskEntry
+{
+	inline std::string HexEncode(const std::string& s)
+	{
+		static const char* kHex = "0123456789ABCDEF";
+		std::string r;
+		r.reserve(s.size() * 2);
+		for (size_t i = 0; i < s.size(); ++i)
+		{
+			const unsigned char c = (unsigned char)s[i];
+			r.push_back(kHex[c >> 4]);
+			r.push_back(kHex[c & 0x0F]);
+		}
+		return r;
+	}
+
+	inline int HexVal(char c)
+	{
+		if (c >= '0' && c <= '9') return c - '0';
+		if (c >= 'a' && c <= 'f') return c - 'a' + 10;
+		if (c >= 'A' && c <= 'F') return c - 'A' + 10;
+		return -1;
+	}
+
+	inline std::string HexDecode(const std::string& s)
+	{
+		std::string r;
+		r.reserve(s.size() / 2);
+		for (size_t i = 0; i + 1 < s.size(); i += 2)
+		{
+			const int a = HexVal(s[i]), b = HexVal(s[i + 1]);
+			if (a < 0 || b < 0) break;
+			r.push_back((char)((a << 4) | b));
+		}
+		return r;
+	}
+
+	inline long long ToLL(const std::string& s)
+	{
+		long long v = 0;
+		bool bNeg = false;
+		size_t i = 0;
+		if (i < s.size() && (s[i] == '-' || s[i] == '+')) { bNeg = (s[i] == '-'); ++i; }
+		for (; i < s.size() && s[i] >= '0' && s[i] <= '9'; ++i) v = v * 10 + (s[i] - '0');
+		return bNeg ? -v : v;
+	}
+
+	// 按分隔符切段(不跳过空段)
+	inline std::vector<std::string> Split(const std::string& s, char ch)
+	{
+		std::vector<std::string> r;
+		for (size_t p = 0; p <= s.size(); )
+		{
+			const size_t q = s.find(ch, p);
+			if (q == std::string::npos) { r.push_back(s.substr(p)); break; }
+			r.push_back(s.substr(p, q - p));
+			p = q + 1;
+		}
+		return r;
+	}
+
+	// 一个作业项 -> ini 里的一行
+	inline std::string Encode(bool bChecked, const std::string& strPathUtf8,
+	                          int nDpi, int nBit, const std::vector<RIPDotStat>& vecStats)
+	{
+		std::string s = bChecked ? "1|" : "0|";
+		s += strPathUtf8;
+		s += "|" + std::to_string((long long)nDpi);
+		s += "|" + std::to_string((long long)nBit);
+		s += "|" + std::to_string((long long)vecStats.size());
+		s += "|";
+		for (size_t k = 0; k < vecStats.size(); ++k)
+		{
+			const RIPDotStat& t = vecStats[k];
+			if (k) s += ';';
+			s += HexEncode(t.m_strInk);
+			s += ":" + std::to_string(t.m_nDotsSmall);
+			s += ":" + std::to_string(t.m_nDotsMid);
+			s += ":" + std::to_string(t.m_nDotsBig);
+			s += ":" + std::to_string(t.m_nDots);
+			s += ":" + std::to_string(t.m_nInkPixels);
+			s += ":" + std::to_string(t.m_nMaxArea);
+		}
+		return s;
+	}
+
+	// ini 里的一行 -> 作业项(老格式时 vecStats 为空)。返回 false = 这行无效
+	inline bool Decode(const std::string& s, bool& bChecked, std::string& strPathUtf8,
+	                   int& nDpi, int& nBit, std::vector<RIPDotStat>& vecStats)
+	{
+		bChecked = true; strPathUtf8.clear(); nDpi = 0; nBit = 1; vecStats.clear();
+		if (s.empty()) return false;
+		if (s[0] == '0' || s[0] == '1') bChecked = (s[0] != '0');
+
+		const std::vector<std::string> f = Split(s, '|');
+		if (f.size() < 2) return false;
+		strPathUtf8 = f[1];
+		if (f.size() < 6) return true;			// 老格式: 只有勾选 + 路径
+
+		nDpi = (int)ToLL(f[2]);
+		nBit = (ToLL(f[3]) == 2) ? 2 : 1;
+
+		const std::vector<std::string> inks = Split(f[5], ';');
+		for (size_t k = 0; k < inks.size(); ++k)
+		{
+			const std::vector<std::string> g = Split(inks[k], ':');
+			if (g.size() != 7) continue;
+			RIPDotStat t;
+			t.m_strInk = HexDecode(g[0]);
+			t.m_nDotsSmall = ToLL(g[1]);
+			t.m_nDotsMid = ToLL(g[2]);
+			t.m_nDotsBig = ToLL(g[3]);
+			t.m_nDots = ToLL(g[4]);
+			t.m_nInkPixels = ToLL(g[5]);
+			t.m_nMaxArea = ToLL(g[6]);
+			vecStats.push_back(t);
+		}
+		return true;
+	}
+}
 
 struct RIPPageResult
 {

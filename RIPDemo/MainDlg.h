@@ -95,6 +95,8 @@ public:
 
 	// CLvRIPTaskAdapter::IListen: 左侧列表选中项变化 -> 右侧展示该 PDF 的墨点统计
 	void OnListItemSelected(int nIndex) override;
+	// CLvRIPTaskAdapter::IListen: 勾选状态变化 -> 作业列表落盘
+	void OnListCheckChanged(int nIndex, bool bChecked) override;
 
 	void SaveCMYKToTIFF(const char* filename, unsigned char* pData, int width, int height);
 
@@ -113,6 +115,11 @@ protected:
 	void OnBtnSelectOutRoot();			// 按钮: 选择输出根目录
 	void OnRemoveSelectedFile();		// 菜单: 删除左侧列表选中的 PDF
 	void OnClearFileList();				// 菜单: 清空左侧 PDF 列表
+	void OnCheckAllFiles();				// 菜单: 全选 / 全不选
+	// 墨滴体积(pL)/墨价编辑框内容一变(EventRENotify) -> 立刻重算耗墨量与成本
+	BOOL OnInkEditChanged(EventArgs* e);
+	// 防抖落盘定时器: 界面参数/作业列表变化 1.5s 后写一次 RIPDemo.ini
+	BOOL OnAutoSaveTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	BOOL OnRipItemStatus(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	BOOL OnRipAllDone(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 	BOOL OnRipProgress(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
@@ -120,6 +127,10 @@ protected:
 
 	// 把第 nIndex 项的墨点统计刷到右侧面板(没有统计就显示提示文字)
 	void ShowDotStatPanel(int nIndex);
+	// 读界面上的墨滴体积(皮升): 控件不存在/非法时保持传入的默认值
+	void GetDropPL(double& dSmall, double& dMid, double& dBig);
+	// 读界面上的墨水单价(元/毫升): 控件不存在时返回默认值
+	double GetInkPriceML();
 
 	//soui消息
 	EVENT_MAP_BEGIN()
@@ -145,6 +156,7 @@ protected:
 		MESSAGE_HANDLER(WM_RIP_ALL_DONE, OnRipAllDone)
 		MESSAGE_HANDLER(WM_RIP_PROGRESS, OnRipProgress)
 		MESSAGE_HANDLER(WM_RIP_DOTSTAT, OnRipDotStat)
+		MESSAGE_HANDLER(WM_TIMER, OnAutoSaveTimer)
 		CHAIN_MSG_MAP(SHostWnd)
 		REFLECT_NOTIFICATIONS_EX()
 	END_MSG_MAP()
@@ -156,6 +168,10 @@ private:
 	void ApplyRipParamsToUI(const RIPParams& params);
 	// 启动时把命令行传入的 PDF 加入列表(支持双击 PDF / 拖到 exe 上打开)
 	void AddCommandLinePdfs();
+	// 用配置里的作业列表重建左侧列表(含勾选状态)
+	void RestoreTaskListFromConfig(const RIPParams& params);
+	// 界面参数/作业列表变了: 延迟落盘(同一个定时器重复设置即防抖)
+	void ScheduleConfigSave();
 	// 启动 / 停止 RIP 队列
 	bool StartRipQueue();
 	void StopRipQueue();

@@ -496,6 +496,36 @@ static int RunConfigSelfTest()
 	w.m_nPrnVersion = kPrnVer;
 	w.m_strCMYKICC = kIcc;
 
+	// 墨滴体积 / 墨水单价 / 作业列表 也一起过一遍读写
+	const double kInkPrice = 1.25;
+	const double kPL0 = 2.5, kPL1 = 6.25, kPL2 = 12.5;
+	const std::string kTask0 = "1|D:/测试PDF/打样PDF/TEST.pdf";
+
+	// 第 2 项带第 1 页墨点统计: 验证「编码 -> 落盘 -> 读回 -> 解码」全链路。
+	// 专色名故意带上 '|' ';' ':' 三种分隔符, 验证 hex 编码确实避开了串扰。
+	std::vector<RIPDotStat> vecStat;
+	{
+		RIPDotStat t;
+		t.m_strInk = "Spot|A;B:C";
+		t.m_nDotsSmall = 11; t.m_nDotsMid = 22; t.m_nDotsBig = 33; t.m_nDots = 66;
+		t.m_nInkPixels = 777; t.m_nMaxArea = 888;
+		vecStat.push_back(t);
+
+		RIPDotStat k;
+		k.m_strInk = "K";
+		k.m_nDotsSmall = 1; k.m_nDotsMid = 2; k.m_nDotsBig = 3; k.m_nDots = 6;
+		k.m_nInkPixels = 123456; k.m_nMaxArea = 4096;
+		vecStat.push_back(k);
+	}
+	const std::string kTask1 = RIPTaskEntry::Encode(false, "C:/a/b.pdf", 600, 2, vecStat);
+	w.m_dInkPricePerML = kInkPrice;
+	w.m_dDropSmallPL = kPL0;
+	w.m_dDropMidPL   = kPL1;
+	w.m_dDropBigPL   = kPL2;
+	w.m_vecTaskList.clear();
+	w.m_vecTaskList.push_back(kTask0);
+	w.m_vecTaskList.push_back(kTask1);
+
 	if (!RIPConfig::Save(w))
 	{
 		printf("[FAIL] 保存失败\n");
@@ -555,6 +585,50 @@ static int RunConfigSelfTest()
 	if (r.m_strCMYKICC != kIcc)
 	{
 		printf("  [x] ICC 路径  写=%s 读=%s\n", kIcc.c_str(), r.m_strCMYKICC.c_str());  ++nBad;
+	}
+	if (r.m_dInkPricePerML != kInkPrice || r.m_dDropSmallPL != kPL0 ||
+		r.m_dDropMidPL != kPL1 || r.m_dDropBigPL != kPL2)
+	{
+		printf("  [x] 墨滴/墨价  写=%.2f,[%.2f,%.2f,%.2f] 读=%.2f,[%.2f,%.2f,%.2f]\n",
+			   kInkPrice, kPL0, kPL1, kPL2,
+			   r.m_dInkPricePerML, r.m_dDropSmallPL, r.m_dDropMidPL, r.m_dDropBigPL);
+		++nBad;
+	}
+	if (r.m_vecTaskList.size() != 2 || r.m_vecTaskList[0] != kTask0 || r.m_vecTaskList[1] != kTask1)
+	{
+		printf("  [x] 作业列表  写=2 项 读=%d 项\n", (int)r.m_vecTaskList.size());
+		++nBad;
+	}
+	else
+	{
+		printf("  [OK] 作业列表 2 项往返一致(含勾选状态与中文路径)\n");
+	}
+
+	// 第 2 项: 验证墨点统计的 编码 -> 落盘 -> 读回 -> 解码 全链路一致
+	{
+		bool bCk = true;
+		std::string strP;
+		int nDp = 0, nBt = 1;
+		std::vector<RIPDotStat> vecBack;
+		const bool bOk = (r.m_vecTaskList.size() > 1) &&
+			RIPTaskEntry::Decode(r.m_vecTaskList[1], bCk, strP, nDp, nBt, vecBack);
+		const bool bSame = bOk && !bCk && strP == "C:/a/b.pdf" &&
+			nDp == 600 && nBt == 2 && vecBack.size() == 2 &&
+			vecBack[0].m_strInk == "Spot|A;B:C" && vecBack[0].m_nDotsSmall == 11 &&
+			vecBack[0].m_nDotsMid == 22 && vecBack[0].m_nDotsBig == 33 &&
+			vecBack[0].m_nDots == 66 && vecBack[0].m_nInkPixels == 777 &&
+			vecBack[0].m_nMaxArea == 888 && vecBack[1].m_strInk == "K" &&
+			vecBack[1].m_nInkPixels == 123456 && vecBack[1].m_nMaxArea == 4096;
+		if (bSame)
+		{
+			printf("  [OK] 墨点统计随作业列表往返一致(600dpi/2bit, 2 色版, 专色名含分隔符)\n");
+		}
+		else
+		{
+			printf("  [x] 墨点统计往返失败 ok=%d cnt=%d\n",
+				bOk ? 1 : 0, (int)vecBack.size());
+			++nBad;
+		}
 	}
 
 	// 还原自测前是否本来就存在(没有就删掉, 自测别新建)
@@ -752,21 +826,35 @@ namespace
 			printf("\n  === 墨点统计  page %d  (%d DPI / %d bit / %s) ===\n",
 				   (int)i + 1, slots[i].m_nDpi, slots[i].m_nBit,
 				   slots[i].m_vecDotStats.size() > 4 ? "含专色" : "CMYK");
-			printf("  %-8s %12s %12s %12s %12s %14s\n",
-				   "ink", "dots", "small", "mid", "big", "inkPixels");
+			printf("  %-8s %12s %12s %12s %12s %14s %14s\n",
+				   "ink", "dots", "small", "mid", "big", "inkPixels", "inkPL");
 			long long tD = 0, tS = 0, tM = 0, tB = 0, tP = 0;
+			double tPL = 0.0;
 			for (size_t k = 0; k < slots[i].m_vecDotStats.size(); ++k)
 			{
 				const RIPDotStat& d = slots[i].m_vecDotStats[k];
-				printf("  %-8s %12lld %12lld %12lld %12lld %14lld\n", d.m_strInk.c_str(),
-					   d.m_nDots, d.m_nDotsSmall, d.m_nDotsMid, d.m_nDotsBig, d.m_nInkPixels);
+				const double dPL = RIPDotsToPL(d, params.DropSmallPL(),
+									  params.DropMidPL(), params.DropBigPL());
+				printf("  %-8s %12lld %12lld %12lld %12lld %14lld %14.1f\n", d.m_strInk.c_str(),
+					   d.m_nDots, d.m_nDotsSmall, d.m_nDotsMid, d.m_nDotsBig, d.m_nInkPixels, dPL);
 				tD += d.m_nDots; tS += d.m_nDotsSmall; tM += d.m_nDotsMid;
-				tB += d.m_nDotsBig; tP += d.m_nInkPixels;
+				tB += d.m_nDotsBig; tP += d.m_nInkPixels; tPL += dPL;
 			}
-			printf("  %-8s %12lld %12lld %12lld %12lld %14lld\n", "TOTAL", tD, tS, tM, tB, tP);
-			printf("  分档: 小点 < %d um, 中点 %d~%d um, 大点 >= %d um\n",
-				   params.m_nDotSmallUM, params.m_nDotSmallUM, params.m_nDotMidUM,
-				   params.m_nDotMidUM);
+			printf("  %-8s %12lld %12lld %12lld %12lld %14lld %14.1f\n",
+				   "TOTAL", tD, tS, tM, tB, tP, tPL);
+			if (slots[i].m_nBit == 1)
+			{
+				printf("  1bit: 打点数=出墨像素, 全部记在 big 列, 耗墨量按大点 pL 算\n");
+				printf("  墨滴: 大点 %.4g pL  ->  合计 %.1f pL (= %.4f uL)\n",
+					   params.DropBigPL(), tPL, tPL * 1e-6);
+			}
+			else
+			{
+				printf("  2bit 按像素级别: L1=小点 L2=中点 L3=大点 (点数=出墨像素数)\n");
+				printf("  墨滴: 小点 %.4g pL, 中点 %.4g pL, 大点 %.4g pL  ->  合计 %.1f pL (= %.4f uL)\n",
+					   params.DropSmallPL(), params.DropMidPL(), params.DropBigPL(),
+					   tPL, tPL * 1e-6);
+			}
 		}
 
 		printf("\n=========== 基准%s ===========\n", nFail == 0 ? "通过" : "有失败页");

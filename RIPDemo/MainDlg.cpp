@@ -1,4 +1,4 @@
-﻿// MainDlg.cpp : implementation of the CMainDlg class
+﻿﻿// MainDlg.cpp : implementation of the CMainDlg class
 //
 /////////////////////////////////////////////////////////////////////////////
 
@@ -12,6 +12,9 @@
 
 namespace
 {
+	// 「界面参数 / 作业列表」防抖落盘定时器(每次变化重设 = 停止操作 1.5s 后写一次)
+	const UINT_PTR kAutoSaveTimerId = 0x1A21;
+
 	// 向 UI 线程投递一条任务状态(堆对象由 UI 线程接管释放)
 	void PostRipStatus(RipJob* pJob, int nIndex, int nStatus, const SStringW& sstrText)
 	{
@@ -129,10 +132,26 @@ BOOL CMainDlg::OnInitDialog(HWND hWnd, LPARAM lParam)
 		RIPConfig::Load(params);
 
 		ApplyRipParamsToUI(params);
+		// 上次退出时的作业列表: 重建左侧列表(含勾选状态, 文件已不存在的跳过)
+		RestoreTaskListFromConfig(params);
 	}
 
 	// 命令行传入的 PDF(双击文件 / 拖到 exe 上打开)直接进列表
 	AddCommandLinePdfs();
+
+	// 墨滴体积(皮升) + 墨价编辑框: 内容一变(EventRENotify)立刻重算耗墨量与成本,
+	// 不用等失焦、也不用按回车。
+	{
+		LPCWSTR kDropEdits[] = { L"edit_drop_small_pl", L"edit_drop_mid_pl",
+								 L"edit_drop_big_pl",   L"edit_ink_price_ml" };
+		for (int i = 0; i < 4; ++i)
+		{
+			SEdit* pEdit = FindChildByName2<SEdit>(kDropEdits[i]);
+			if (!pEdit) continue;
+			pEdit->GetEventSet()->subscribeEvent(EventRENotify::EventID,
+				Subscriber(&CMainDlg::OnInkEditChanged, this));
+		}
+	}
 
 	// 右侧「墨点统计」面板先刷一次空态提示(此时还没有选中任何文件)
 	ShowDotStatPanel(-1);
@@ -175,9 +194,63 @@ void CMainDlg::AddCommandLinePdfs()
 		if (::GetFileAttributesW(full.c_str()) == INVALID_FILE_ATTRIBUTES)
 			continue;
 
+		// 已经在列表里(比如刚从配置重建过)就不重复添加
+		if (m_pRIPTaskAdapter->FindRipTask(full.c_str()) >= 0)
+			continue;
+
 		m_pRIPTaskAdapter->AddRipTask(full.c_str());
 	}
 	::LocalFree(argv);
+}
+
+// ============================================================================
+// 用配置里的作业列表重建左侧列表
+//   每项 "<0|1>|<UTF-8 路径>|<dpi>|<bit>|<色版数>|<色版统计;...>"(见 RIPParams);
+//   文件已不存在的直接跳过; 上次存下的第 1 页墨点统计一并恢复
+// ============================================================================
+void CMainDlg::RestoreTaskListFromConfig(const RIPParams& params)
+{
+	if (!m_pRIPTaskAdapter) return;
+
+	for (size_t i = 0; i < params.m_vecTaskList.size(); ++i)
+	{
+		bool bChecked = true;
+		std::string strPath;
+		int nDpi = 0, nBit = 1;
+		std::vector<RIPDotStat> vecStats;
+
+		if (!RIPTaskEntry::Decode(params.m_vecTaskList[i],
+				bChecked, strPath, nDpi, nBit, vecStats))
+			continue;
+		if (strPath.empty()) continue;
+
+		const std::wstring w = RIPExt::Utf8ToWString(strPath);
+		if (w.empty()) continue;
+		if (::GetFileAttributesW(w.c_str()) == INVALID_FILE_ATTRIBUTES)
+			continue;						// 路径已失效(文件被移走/改名的)
+
+		// 上次 RIP 存下的第 1 页墨点统计一起恢复
+		m_pRIPTaskAdapter->AddRipTask(w.c_str(), bChecked, &vecStats, nDpi, nBit);
+	}
+}
+
+// ============================================================================
+// 界面参数 / 作业列表变了: 延迟 1.5s 写盘(同一个定时器重复设置会重置计时 = 防抖),
+//   这样改完参数或增删文件后即使程序异常退出, 配置也基本不会丢。
+// ============================================================================
+void CMainDlg::ScheduleConfigSave()
+{
+	SetTimer(kAutoSaveTimerId, 1500);
+}
+
+BOOL CMainDlg::OnAutoSaveTimer(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
+{
+	KillTimer(kAutoSaveTimerId);
+
+	RIPParams params;
+	CollectRipParams(params);
+	RIPConfig::Save(params);
+	return TRUE;
 }
 
 // ============================================================================
@@ -272,6 +345,23 @@ void CMainDlg::ApplyRipParamsToUI(const RIPParams& params)
 			pEditOutRoot->SetWindowText(RIPExt::Utf8ToWString(params.m_strOutputRoot).c_str());
 		else
 			pEditOutRoot->SetWindowText(L"");
+	}
+
+	// ---- 墨滴体积(皮升 pL): 小点 / 中点 / 大点 ----
+	{
+		const double kPL[3] = { params.DropSmallPL(), params.DropMidPL(), params.DropBigPL() };
+		LPCWSTR kNames[] = { L"edit_drop_small_pl", L"edit_drop_mid_pl", L"edit_drop_big_pl" };
+		for (int i = 0; i < 3; ++i)
+		{
+			SEdit* pEdit = FindChildByName2<SEdit>(kNames[i]);
+			if (pEdit) pEdit->SetWindowText(SStringW().Format(L"%.4g", kPL[i]));
+		}
+	}
+
+	// ---- 墨水单价(元 / 毫升) ----
+	{
+		SEdit* pEdit = FindChildByName2<SEdit>(L"edit_ink_price_ml");
+		if (pEdit) pEdit->SetWindowText(SStringW().Format(L"%.6g", params.InkPricePerML()));
 	}
 }
 
@@ -389,11 +479,41 @@ void CMainDlg::CollectRipParams(RIPParams& params)
 		params.m_nThreadCount = v;
 	}
 
+	// ---- 墨滴体积(皮升) + 墨水单价(元/mL): 只用于把点数换算成耗墨量与成本 ----
+	{
+		double dS = params.DropSmallPL(), dM = params.DropMidPL(), dB = params.DropBigPL();
+		GetDropPL(dS, dM, dB);
+		params.m_dDropSmallPL = dS;
+		params.m_dDropMidPL = dM;
+		params.m_dDropBigPL = dB;
+		params.m_dInkPricePerML = GetInkPriceML();
+	}
+
 	// ---- 以下项界面暂未暴露, 使用默认值 ----
 	params.m_bEnableScreen = (params.m_nDitherMode != 0);	// 非「纯阈值」时才走有序网屏
 	params.m_bRotateScreenY = false;
 	params.m_nScaleToLongSide = 0;		// 0 = 按 DPI 自然缩放
 	params.m_bDumpMergedCMYK = false;
+
+	// ---- 作业列表(左侧列表): 存下来供下次启动重建 ----
+	params.m_vecTaskList.clear();
+	if (m_pRIPTaskAdapter)
+	{
+		for (int i = 0; i < m_pRIPTaskAdapter->GetItemCount(); ++i)
+		{
+			CLvRIPTaskAdapter::ItemData* pItem = m_pRIPTaskAdapter->GetItem(i);
+			if (!pItem) continue;
+
+			const std::wstring w(pItem->m_sstrFilePath.c_str());
+			if (w.empty()) continue;
+
+			// 连同第 1 页墨点统计一起存: 下次启动选中该项就能直接算耗墨量与成本,
+			// 不必重新 RIP(点数在 RIP 时算过一次就固定了, 只有 pL/墨价是界面输入)
+			params.m_vecTaskList.push_back(RIPTaskEntry::Encode(
+				pItem->m_bChecked, RIPExt::WStringToUtf8(w),
+				pItem->m_nDotDpi, pItem->m_nDotBit, pItem->m_vecDotStats));
+		}
+	}
 }
 
 // ============================================================================
@@ -430,6 +550,16 @@ void CMainDlg::OnRipRun()
 	if (!m_pRIPTaskAdapter || m_pRIPTaskAdapter->getCount() <= 0)
 	{
 		SMessageBox(m_hWnd, L"请先通过「文件 → 添加文件」导入 PDF 文件。", L"提示", MB_OK | MB_ICONINFORMATION);
+		return;
+	}
+
+	// 只处理勾选的文件: 一个都没勾就直说, 别让用户以为程序坏了
+	if (m_pRIPTaskAdapter->GetCheckedCount() <= 0)
+	{
+		SMessageBox(m_hWnd, L"任务列表里没有任何勾选的文件。\n"
+					L"请勾选左侧列表中要处理的 PDF（新加入的默认已勾选），\n"
+					L"也可以用「文件 → 全选 / 全不选」一键勾上。",
+					L"提示", MB_OK | MB_ICONINFORMATION);
 		return;
 	}
 
@@ -559,6 +689,7 @@ void CMainDlg::OnRemoveSelectedFile()
 	}
 
 	m_pRIPTaskAdapter->RemoveItem(nSel);
+	ScheduleConfigSave();
 }
 
 // ============================================================================
@@ -580,6 +711,20 @@ void CMainDlg::OnClearFileList()
 		return;
 
 	m_pRIPTaskAdapter->DeleteAllItem();
+	ScheduleConfigSave();
+}
+
+// ============================================================================
+// 菜单: 全选 / 全不选
+//   有任何一项没勾 -> 全部勾上; 已经全勾 -> 全部取消
+// ============================================================================
+void CMainDlg::OnCheckAllFiles()
+{
+	if (!m_pRIPTaskAdapter || m_pRIPTaskAdapter->GetItemCount() <= 0) return;
+
+	const bool bAll = (m_pRIPTaskAdapter->GetCheckedCount() == m_pRIPTaskAdapter->GetItemCount());
+	m_pRIPTaskAdapter->SetAllChecked(!bAll);
+	ScheduleConfigSave();
 }
 
 // ============================================================================
@@ -614,6 +759,8 @@ bool CMainDlg::StartRipQueue()
 	{
 		CLvRIPTaskAdapter::ItemData* pItemData = m_pRIPTaskAdapter->GetItem(i);
 		if (!pItemData || pItemData->m_sstrFilePath.IsEmpty()) continue;
+		// 没勾选的文件直接跳过(状态也不动, 保留上一次的结果)
+		if (!pItemData->m_bChecked) continue;
 
 		RipFileEntry fe;
 		fe.m_strFile = pItemData->m_sstrFilePath;
@@ -959,6 +1106,9 @@ BOOL CMainDlg::OnRipDotStat(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHand
 	if (m_nLvSelIndex == pN->m_nIndex)
 		ShowDotStatPanel(pN->m_nIndex);
 
+	// 点数有更新 -> 稍后连同作业列表一起落盘(重启后不用重跑 RIP 也能算耗墨量)
+	ScheduleConfigSave();
+
 	delete pN;
 	return TRUE;
 }
@@ -970,6 +1120,14 @@ void CMainDlg::OnListItemSelected(int nIndex)
 {
 	m_nLvSelIndex = nIndex;
 	ShowDotStatPanel(nIndex);
+}
+
+// ============================================================================
+// 勾选状态变化 -> 作业列表落盘(延迟防抖)
+// ============================================================================
+void CMainDlg::OnListCheckChanged(int nIndex, bool bChecked)
+{
+	ScheduleConfigSave();
 }
 
 // ============================================================================
@@ -989,7 +1147,10 @@ void CMainDlg::ShowDotStatPanel(int nIndex)
 		if (p) p->SetWindowTextW(L"");
 	}
 
-	SStatic* pTip = FindChildByName2<SStatic>(L"dot_tip");
+	SStatic* pTip   = FindChildByName2<SStatic>(L"dot_tip");
+	SStatic* pPrice = FindChildByName2<SStatic>(L"dot_price");
+	if (pPrice) pPrice->SetWindowTextW(L"");
+
 	CLvRIPTaskAdapter::ItemData* pItem =
 		m_pRIPTaskAdapter ? m_pRIPTaskAdapter->GetItem(nIndex) : NULL;
 
@@ -1005,6 +1166,11 @@ void CMainDlg::ShowDotStatPanel(int nIndex)
 		return;
 	}
 
+	// 1bit 是二值位图: 只有「打点 / 不打点」两种, 没有大中小点之分。
+	//   RIP 侧已把每个出墨像素记成大点(打点数=出墨像素), 这里再把小/中归零,
+	//   于是「打点数 x 大点 pL」自动就是总耗墨量。
+	const bool bBin = (pItem->m_nDotBit == 1);
+
 	long long nDots = 0, nS = 0, nM = 0, nB = 0, nPix = 0;
 	for (size_t k = 0; k < pItem->m_vecDotStats.size(); ++k)
 	{
@@ -1012,6 +1178,15 @@ void CMainDlg::ShowDotStatPanel(int nIndex)
 		nDots += d.m_nDots; nS += d.m_nDotsSmall;
 		nM += d.m_nDotsMid; nB += d.m_nDotsBig; nPix += d.m_nInkPixels;
 	}
+	if (bBin) { nB = nDots; nS = 0; nM = 0; }
+
+	// 界面当前的墨滴体积(皮升) + 墨水单价(元/mL) -- 耗墨量与成本都按它们现算,
+	// 所以改体积/改单价立刻重算, 不需要重新 RIP(点数不变, 纯乘法)。
+	double dSmallPL = 2.0, dMidPL = 6.0, dBigPL = 12.0;
+	GetDropPL(dSmallPL, dMidPL, dBigPL);
+	const double dPriceML  = GetInkPriceML();
+	const double dTotalPL  = (double)nS * dSmallPL + (double)nM * dMidPL + (double)nB * dBigPL;
+	const double dTotalML  = RIPPLToML(dTotalPL);	// 1 pL = 1e-9 mL
 
 	for (int i = 0; i < 4; ++i)
 	{
@@ -1025,29 +1200,107 @@ void CMainDlg::ShowDotStatPanel(int nIndex)
 		const RIPDotStat& d = pItem->m_vecDotStats[i];
 		// 内部路径/名字统一是 UTF-8, 显示前转宽字符
 		const std::wstring wInk = RIPExt::Utf8ToWString(d.m_strInk);
-		p->SetWindowTextW(SStringW().Format(
-			L"%-2s  点 %-9I64d 小 %-8I64d 中 %-7I64d 大 %-7I64d",
-			wInk.c_str(), d.m_nDots, d.m_nDotsSmall, d.m_nDotsMid, d.m_nDotsBig));
+		// 耗墨量按「界面当前的墨滴体积」现算, 改体积不用重新 RIP
+		const double dPL = bBin ? (double)d.m_nDots * dBigPL
+		                        : RIPDotsToPL(d, dSmallPL, dMidPL, dBigPL);
+		if (bBin)
+			p->SetWindowTextW(SStringW().Format(
+				L"%-2s  打点 %-10I64d 墨 %.1f pL", wInk.c_str(), d.m_nDots, dPL));
+		else
+			p->SetWindowTextW(SStringW().Format(
+				L"%-2s  点 %-9I64d 小 %-8I64d 中 %-7I64d 大 %-7I64d  墨 %.1f pL",
+				wInk.c_str(), d.m_nDots, d.m_nDotsSmall, d.m_nDotsMid, d.m_nDotsBig, dPL));
 	}
 
-	// 合计行(含专色)
+	// 合计行(含专色): 总墨量按毫升(mL)给
 	{
 		SStatic* p = FindChildByName2<SStatic>(kLineNames[4]);
 		if (p)
-			p->SetWindowTextW(SStringW().Format(
-				L"合计 点 %-9I64d 小 %-8I64d 中 %-7I64d 大 %-7I64d",
-				nDots, nS, nM, nB));
+		{
+			if (bBin)
+				p->SetWindowTextW(SStringW().Format(
+					L"合计 打点 %-10I64d 总墨量 %.6f mL", nDots, dTotalML));
+			else
+				p->SetWindowTextW(SStringW().Format(
+					L"合计 点 %-9I64d 小 %-8I64d 中 %-7I64d 大 %-7I64d  总墨量 %.6f mL",
+					nDots, nS, nM, nB, dTotalML));
+		}
+	}
+
+	// 价格行: 紧跟在总墨量后面(总墨量 x 每毫升单价)
+	if (pPrice)
+	{
+		if (dPriceML > 0.0)
+			pPrice->SetWindowTextW(SStringW().Format(
+				L"墨水成本  ¥%.6f   (¥%.6g /mL × %.6f mL)",
+				dTotalML * dPriceML, dPriceML, dTotalML));
+		else
+			pPrice->SetWindowTextW(L"墨水成本  —  填上「墨价¥/mL」后自动算 (总墨量 × 单价)");
 	}
 
 	if (pTip)
 	{
-		// 分档口径按等效圆直径换算(与 RIP 时的参数一致)
-		const int nSmallUM = 100, nMidUM = 200;
-		pTip->SetWindowTextW(SStringW().Format(
-			L"第 1 页 %dDPI %dbit ｜ 出墨像素 %I64d ｜ 小点 <%.2fmm  中点 %.2f~%.2fmm  大点 >%.2fmm",
-			pItem->m_nDotDpi, pItem->m_nDotBit, nPix,
-			nSmallUM / 1000.0, nSmallUM / 1000.0, nMidUM / 1000.0, nMidUM / 1000.0));
+		if (bBin)
+		{
+			pTip->SetWindowTextW(SStringW().Format(
+				L"第 1 页 %dDPI 1bit(打点数=出墨像素, 全按大点 pL) ｜ 出墨像素 %I64d ｜ 打点 %I64d ｜ 总耗墨量 %.6f mL (%.0f pL)",
+				pItem->m_nDotDpi, nPix, nDots, dTotalML, dTotalPL));
+		}
+		else
+		{
+			// 2bit 按像素级别统计: 1=小点 2=中点 3=大点(实地色块不再合成一个点)
+			pTip->SetWindowTextW(SStringW().Format(
+				L"第 1 页 %dDPI %dbit 按像素级别(1=小点 2=中点 3=大点) ｜ 出墨像素 %I64d ｜ 总耗墨量 %.6f mL (%.0f pL)",
+				pItem->m_nDotDpi, pItem->m_nDotBit, nPix, dTotalML, dTotalPL));
+		}
 	}
+}
+
+// ============================================================================
+// 读界面上的墨滴体积(皮升)
+//   控件不存在时保持传入值不变, 这样调用方可以先放默认值
+// ============================================================================
+void CMainDlg::GetDropPL(double& dSmall, double& dMid, double& dBig)
+{
+	LPCWSTR kNames[] = { L"edit_drop_small_pl", L"edit_drop_mid_pl", L"edit_drop_big_pl" };
+	double* pOut[3] = { &dSmall, &dMid, &dBig };
+
+	for (int i = 0; i < 3; ++i)
+	{
+		SEdit* pEdit = FindChildByName2<SEdit>(kNames[i]);
+		if (!pEdit) continue;
+
+		const double v = _wtof(pEdit->GetWindowText().c_str());
+		*pOut[i] = (v < 0.0) ? 0.0 : v;
+	}
+}
+
+// ============================================================================
+// 读界面上的墨水单价(元/毫升): 控件不存在时按 0 算(界面显示「未填写」)
+// ============================================================================
+double CMainDlg::GetInkPriceML()
+{
+	double d = 0.0;
+	SEdit* pEdit = FindChildByName2<SEdit>(L"edit_ink_price_ml");
+	if (pEdit)
+	{
+		const double v = _wtof(pEdit->GetWindowText().c_str());
+		d = (v < 0.0) ? 0.0 : v;
+	}
+	return d;
+}
+
+// ============================================================================
+// 墨滴体积(pL)/墨价编辑框内容一变就重算(不需要等失焦, 也不需要回车)
+//   SEdit 实为 TCtrlProxy<IEdit, SRichEdit>, 内容变化走 SRichEdit::OnTxNotify,
+//   会 FireEvent(EventRENotify) -- 订阅它即可, 覆盖键盘输入 / 粘贴 / 输入法上屏。
+// ============================================================================
+BOOL CMainDlg::OnInkEditChanged(EventArgs* e)
+{
+	ShowDotStatPanel(m_nLvSelIndex);
+	// 墨滴体积/墨价也要进配置文件: 停止输入 1.5s 后落盘
+	ScheduleConfigSave();
+	return TRUE;
 }
 
 // ============================================================================
@@ -1181,6 +1434,7 @@ void CMainDlg::OnCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 			{
 				// 添加到 RIP 任务列表(带路径, 供「开始RIP」使用)
 				m_pRIPTaskAdapter->AddRipTask(szFile);
+				ScheduleConfigSave();
 			}
 		}
 		else if (nID == R.id.menu_file_riprun) {
@@ -1194,6 +1448,9 @@ void CMainDlg::OnCommand(UINT uNotifyCode, int nID, HWND wndCtl)
 		}
 		else if (nID == R.id.menu_file_clearfile) {
 			OnClearFileList();
+		}
+		else if (nID == R.id.menu_file_checkall) {
+			OnCheckAllFiles();
 		}
 	}
 }
@@ -1210,6 +1467,10 @@ void CMainDlg::OnClose()
 
 	// 先停掉工作线程, 避免窗口销毁后仍有状态消息投递
 	StopRipQueue();
+
+	// 防抖落盘定时器(退出前已手动保存过, 这里只是别让它在销毁后再触发)
+	KillTimer(kAutoSaveTimerId);
+
 	SNativeWnd::DestroyWindow();
 }
 
